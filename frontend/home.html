@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C240 - Home</title>
+  <link rel="stylesheet" href="styling.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="chat.html">Chat</a>
+      <a href="login.html">Login</a>
+      <a href="signup.html">Sign Up</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <h1>Welcome to C240</h1>
+    <p>Your simple startup website is now running.</p>
+    <a class="btn" href="chat.html">Open Chat</a>
+  </main>
+
+  <script>
+    fetch('/api/health')
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.error('Health check failed', err));
+  </script>
+</body>
+</html>
