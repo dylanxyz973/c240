@@ -4,22 +4,90 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>C240 - Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styling.css" />
 </head>
 <body>
   <header>
     <nav>
-      <a href="home.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="chat.html">Chat</a>
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign Up</a>
+      <a href="home.html" class="brand">Beyond Four Walls</a>
+      <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="chat.html" class="active">Chat</a>
+        <a href="login.html">Login</a>
+        <a href="signup.html" class="btn-nav">Sign Up</a>
+      </div>
     </nav>
   </header>
 
-  <main class="content-card">
-    <h1>Chat Page</h1>
-    <p>This is a placeholder chat screen for your website.</p>
+  <main class="chat-page">
+    <div class="chat-glow" aria-hidden="true"></div>
+
+    <section class="chat-hero">
+      <p class="eyebrow">A quiet space to talk</p>
+      <h1>Hi, I'm Lumi.</h1>
+      <p class="subtext">Whatever's on your mind, we can take it at your pace.</p>
+    </section>
+
+    <!-- Botpress mounts here instead of the default floating bubble -->
+    <section class="chat-panel" id="chat-mount" aria-label="Chat conversation"></section>
   </main>
+
+  <!-- Botpress Webchat -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2026/05/12/04/20260512040002-3M3JEC0F.js" defer></script>
+
+  <!--
+    The script above auto-initializes Botpress as a floating widget (bottom-right
+    bubble). We don't have access to edit that hosted file directly, so instead we
+    tear down that floating instance once it's ready and re-init it targeting our
+    #chat-mount container. This is the same pattern Botpress's own team uses in
+    their official embed demo (codepen.io/botpress-team/pen/dPyXZMQ), it just
+    re-spreads the existing config rather than requiring your botId.
+  -->
+  <script>
+    window.addEventListener('load', function () {
+      function mountInline() {
+        try {
+          if (window.botpress.fabIframe) window.botpress.fabIframe.remove();
+          if (window.botpress.webchatIframe) window.botpress.webchatIframe.remove();
+          window.botpress.initialized = false;
+          window.botpress.init({
+            ...window.botpress,
+            configuration: {
+              ...window.botpress.configuration,
+              color: '#C96442',
+              variant: 'soft',
+              themeMode: 'light',
+              radius: 2,
+              fontFamily: 'Inter',
+            },
+            selector: '#chat-mount',
+          });
+          window.botpress.on('webchat:ready', function () {
+            window.botpress.open();
+          });
+        } catch (err) {
+          console.error('Could not mount Botpress inline:', err);
+        }
+      }
+
+      // Poll briefly for window.botpress since the generated script is deferred
+      var tries = 0;
+      var waitForBotpress = setInterval(function () {
+        tries++;
+        if (window.botpress && window.botpress.initialized) {
+          clearInterval(waitForBotpress);
+          mountInline();
+        } else if (tries > 40) {
+          clearInterval(waitForBotpress);
+          console.error('Botpress did not initialize in time.');
+        }
+      }, 250);
+    });
+  </script>
 </body>
 </html>
