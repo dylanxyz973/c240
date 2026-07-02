@@ -1,0 +1,362 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Instrument Sans', sans-serif;
+}
+
+body, html {
+    height: 100%;
+    background-color: #f5f5f5;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+/* --- LEFT PANEL (FORM SIDE) --- */
+.left-panel {
+    width: 45%;            
+    min-width: 480px;       
+    background-color: #d8ecea; /* Clean mint background */
+    padding: 50px 80px;    /* 80px left/right padding aligns the form components */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Logo Setup */
+.logo-container {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    
+    /* 👈 NEGATIVE MARGIN: Cancels out the panel's 80px left padding */
+    /* This forces the white box to stick perfectly to the left screen edge */
+    margin-left: -80px; 
+    margin-bottom: 40px; 
+}
+
+.logo-banner-img {
+    height: 65px;           /* 👈 Upgraded size to match your target design layout */
+    width: auto;            /* Keeps the banner proportions perfectly clean */
+    object-fit: contain;
+}
+
+.welcome-text {
+    font-family: 'Caveat', cursive;
+    font-size: 42px;
+    color: #000;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 35px;
+    max-width: 95%;
+}
+
+/* Form Card Container */
+.form-card {
+    background-color: white;
+    padding: 35px 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.input-group input {
+    padding: 14px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    background-color: #fff;
+}
+
+.login-btn {
+    width: 100%;
+    background-color: #d6e2ff; 
+    color: #1a1a1a;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.forgot-container {
+    text-align: left;
+}
+
+.forgot-link {
+    font-size: 13px;
+    color: #1a1a1a;
+    text-decoration: underline;
+}
+
+.signup-container {
+    font-size: 14px;
+    color: #1a1a1a;
+    max-width: 420px;
+    text-align: center;
+}
+
+.signup-container a {
+    color: #1a1a1a;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+/* --- RIGHT PANEL (IMAGE SIDE) --- */
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.img-placeholder {
+    flex: 1;
+    width: 100%;
+    background-size: cover;       
+    background-position: center;  
+    border-bottom: 2px solid white;
+}
+
+.img-3 { 
+    border-bottom: none; 
+}
+
+/* Responsive collapse for tablets/phones */
+@media (max-width: 940px) {
+    .container {
+        flex-direction: column;
+    }
+    .left-panel {
+        width: 100%;
+        min-width: 100%;
+        padding: 40px 20px;
+    }
+    .logo-container {
+        margin-left: -20px; /* Adapts the stick-to-left effect on mobile layout screens */
+    }
+    .right-panel {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   HOME / LANDING PAGE STYLES (Append to the bottom of style.css)
+   ========================================================================== */
+
+/* --- NAVIGATION BAR --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 16px 60px;
+    height: 80px;
+    width: 100%;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.nav-logo {
+    height: 50px; 
+    width: auto;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    gap: 35px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    font-size: 18px;
+    position: relative;
+    padding-bottom: 6px;
+}
+
+/* The dark active underline indicator under "Home" */
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #000000;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-link-btn {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+/* Rounded peach accent background button for Sign Up */
+.nav-btn-signup {
+    text-decoration: none;
+    color: #000000;
+    font-weight: 500;
+    font-size: 18px;
+    background-color: #fcecef; 
+    padding: 10px 24px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-btn-signup:hover {
+    background-color: #f7dadf;
+}
+
+/* --- MAIN HERO WRAPPER --- */
+.hero-container {
+    background-color: #f09dc2; /* Precise signature bubblegum pink background from image_652c16.png */
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    width: 100%;
+}
+
+/* 2x2 Symmetric Responsive Grid Engine */
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px 80px;
+    max-width: 1200px;
+    width: 100%;
+    align-items: center;
+}
+
+/* --- TEXT CONTENT STYLES --- */
+.grid-text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.display-heading {
+    font-family: 'Aclonica', sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: #000000;
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.body-text {
+    font-size: 16px;
+    color: #1a1a1a;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    max-width: 460px;
+}
+
+/* Light Blue Flat-Design Action Buttons */
+.action-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: #000000;
+    background-color: #cfe2fe; 
+    padding: 12px 28px;
+    border: 2px solid #000000; /* Bold flat layout border line */
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 20px;
+    box-shadow: 0 3px 0px rgba(0,0,0,1); /* Retro flat tactile click shadow */
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.action-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0px rgba(0,0,0,1);
+}
+
+/* --- ILLUSTRATION FRAMES --- */
+.grid-img-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    padding: 20px;
+    height: 320px; 
+    width: 100%;
+}
+
+.grid-img-block img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Protects teammate vector ratios perfectly */
+}
+
+/* Distinct frame background tints matching your imagery assets */
+.robot-card-bg {
+    background-color: #cbe9ff; /* Soft blue block */
+}
+
+.phone-card-bg {
+    background-color: #fcdade; /* Soft pink/coral block */
+}
+
+/* --- MOBILE RESPONSIVENESS OVERRIDES --- */
+@media (max-width: 940px) {
+    .navbar {
+        padding: 16px 30px;
+    }
+    .nav-left {
+        gap: 30px;
+    }
+    .hero-grid {
+        grid-template-columns: 1fr; /* Safely collapses to 1 column on tablet screens */
+        gap: 40px 0;
+    }
+    .hero-container {
+        padding: 40px 30px;
+    }
+}
