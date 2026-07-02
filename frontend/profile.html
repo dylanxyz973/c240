@@ -97,51 +97,9 @@
     &copy; 2026 Beyond Four Walls. Built for C240.
   </footer>
 
-  <script>
-    // Handle Profile Form submission and forward data to n8n
-    document.getElementById('profileForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+  <p id="statusMessage"></p>
+  
+  <script src="script.js"></script>
 
-      // Gather checked interests into an array
-      const selectedInterests = [];
-      document.querySelectorAll('input[name="interests"]:checked').forEach((checkbox) => {
-        selectedInterests.push(checkbox.value);
-      });
-
-      // Construct payload data object
-      const formData = {
-        name: document.getElementById('name').value,
-        age: parseInt(document.getElementById('age').value, 10),
-        school: document.getElementById('school').value,
-        bio: document.getElementById('bio').value,
-        interests: selectedInterests,
-        timestamp: new Date().toISOString()
-      };
-
-      console.log('Sending data to n8n webhook:', formData);
-
-      // REPLACE WITH YOUR ACTUAL N8N WEBHOOK URL
-      const n8nWebhookUrl = 'https://primary-production-xxxx.up.railway.app/webhook/xxxx-xxxx';
-
-      fetch(n8nWebhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('Profile saved successfully and sent to n8n!');
-        } else {
-          alert('Failed to save profile on the backend server.');
-        }
-      })
-      .catch(err => {
-        console.error('Error hitting n8n Webhook:', err);
-        alert('Error connecting to matching service webhook.');
-      });
-    });
-  </script>
 </body>
 </html>

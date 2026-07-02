@@ -38,33 +38,32 @@ nav {
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  align-items: center;
 }
- 
-.brand {
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+ .brand {
   font-family: var(--serif);
   font-weight: 600;
   font-size: 1.1rem;
   color: var(--ink);
   text-decoration: none;
 }
- 
-.nav-links {
+
+nav a {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
- 
-nav a {
+  height: 44px;
   color: var(--muted);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
-  transition: color 0.15s ease;
 }
  
 nav a:hover,
@@ -75,7 +74,8 @@ nav a.active {
 .btn-nav {
   background: var(--ink);
   color: #fff !important;
-  padding: 0.5rem 1rem;
+  padding: 0 20px;
+  height: 44px;
   border-radius: 999px;
 }
  
@@ -85,31 +85,25 @@ nav a.active {
 
 /* Profile icon on nav links */
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
 .profile-dropdown {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .avatar-btn {
-  background-color: #6b8c70; 
-  color: #ffffff;
-  border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #6b8c70;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
 }
 
 /* Dropdown Menu */
@@ -290,7 +284,7 @@ input {
 @media (max-width: 640px) {
   .chat-hero h1 { font-size: 1.9rem; }
   .chat-panel { min-height: 70vh; border-radius: var(--radius-md); }
-  header { padding: 0.75rem 1.25rem; }
+  header { padding: 16px 32px; }
 }
  
 /* ---------- Home page ---------- */
