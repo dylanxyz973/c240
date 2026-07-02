@@ -1,66 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WallBreak Lumi - Home</title>
-  <!-- Google Fonts: Inter for clean text, plus a playful display font options if desired -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beyond Four Walls</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styling.css" />
 </head>
+
 <body>
-
-  <!-- --- NAVIGATION BAR --- -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <!-- Your standalone green square icon asset -->
-      <img src="pics/logo.png" alt="Lumi Icon" class="nav-logo">
+  <header>
+    <nav>
+      <a href="home.html" class="brand">Beyond Four Walls</a>
       <div class="nav-links">
-        <a href="#" class="nav-item active">Home</a>
-        <a href="#" class="nav-item">About</a>
-        <a href="#" class="nav-item">Chat</a>
-      </div>
-    </div>
-    
-    <div class="nav-right">
-      <a href="#" class="nav-link-btn">Log In</a>
-      <a href="#" class="nav-btn-signup">Sign up</a>
-    </div>
-  </nav>
+        <a href="home.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="chat.html">Chat</a>
+        <a href="login.html">Login</a>
+        <a href="signup.html" class="btn-nav">Sign Up</a>
 
-  <!-- --- MAIN HERO SECTION --- -->
-  <main class="hero-container">
-    <div class="hero-grid">
-      
-      <!-- Row 1 Left: Chat Intro Callout -->
-      <div class="grid-text-block">
-        <h1 class="display-heading">Use WallBreak Lumi to chat, learn, and explore ideas.</h1>
-        <p class="body-text">WallBreak Lumi is an AI chatbot that provides instant answers, helpful guidance, and interactive conversations anytime, anywhere. ✨</p>
-        <a href="#" class="action-btn">Proceed To Chat</a>
+        <div class="profile-dropdown" id="profileDropdown">
+          <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
+            aria-expanded="false">A</button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="profile.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
+            <a href="#" id="logoutOpt" class="logout-link"><span class="icon">🚪</span> Logout</a>
+          </div>
+        </div>
       </div>
-      
-      <!-- Row 1 Right: Waving Robot Card -->
-      <div class="grid-img-block robot-card-bg">
-        <img src="pics/image4.png" alt="Waving Robot Illustration">
-      </div>
-      
-      <!-- Row 2 Left: Phone/Chat App Card -->
-      <div class="grid-img-block phone-card-bg">
-        <img src="pics/image5.png" alt="Phone Chat Illustration">
-      </div>
-      
-      <!-- Row 2 Right: Registration Sign Up Callout -->
-      <div class="grid-text-block">
-        <h2 class="display-heading">Don't have an account?</h2>
-        <p class="body-text">Register an account with WallBreak Lumi by clicking the button below!</p>
-        <a href="#" class="action-btn">Sign Up</a>
-      </div>
+    </nav>
+  </header>
 
+  <main>
+    <section class="hero">
+      <p class="eyebrow">A quiet place to start</p>
+      <h1>Find Friends Who Understand You</h1>
+      <p class="lead">A safe space for youths to connect, talk, and build confidence — at your own pace.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="signup.html">Start Matching</a>
+        <a class="btn btn-secondary" href="chat.html">Talk to Lumi (AI)</a>
+      </div>
+    </section>
+
+    <div class="crack-divider" aria-hidden="true">
+      <svg viewBox="0 0 1100 28" preserveAspectRatio="none">
+        <path d="M0 14 L440 14 L470 4 L500 22 L530 8 L560 14 L1100 14" fill="none" stroke="#E3B04B" stroke-width="1.5"
+          stroke-linecap="round" opacity="0.65" />
+      </svg>
     </div>
+
+    <section class="features" aria-label="Key features">
+      <div class="feature-card">
+        <div class="icon" aria-hidden="true">🤝</div>
+        <p>Find friends with similar interests</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon" aria-hidden="true">💬</div>
+        <p>Chat with your AI companion, Lumi</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon" aria-hidden="true">🌱</div>
+        <p>Build social confidence, gradually</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon" aria-hidden="true">🔒</div>
+        <p>Safe and private environment</p>
+      </div>
+    </section>
+
+    <section class="how-it-works" aria-label="How it works">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <p>Create your profile</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <p>Add your interests</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <p>Get matched with like-minded people</p>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <p>Start conversations safely</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lumi-callout">
+      <div class="lumi-inner">
+        <div class="lumi-text">
+          <h3>Need someone to talk to? Meet Lumi 🤖</h3>
+          <p>Available anytime, no pressure to reply fast.</p>
+        </div>
+        <a class="btn btn-primary" href="chat.html">Open Chat</a>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    &copy; 2026 Beyond Four Walls. Built for C240.
+  </footer>
+  
+  <script src="script.js"></script>
+
+  <script>
+    fetch('/api/health')
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.error('Health check failed', err));
+  </script>
 </body>
+
 </html>
