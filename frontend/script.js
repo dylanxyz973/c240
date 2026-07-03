@@ -76,55 +76,60 @@ function showPopup(message) {
     alert(message);
 }
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+if (form) {
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const interests = [...document.querySelectorAll('input[name="interests"]:checked')]
-        .map(i => i.value);
+        const interests = [...document.querySelectorAll('input[name="interests"]:checked')]
+            .map(i => i.value);
 
-    const profile = {
-        name: document.getElementById("name").value,
-        age: document.getElementById("age").value,
-        school: document.getElementById("school").value,
-        bio: document.getElementById("bio").value,
-        interests: interests
-    };
-
-    try {
-        const response = await fetch(
-            "https://n8ngc.codeblazar.org/webhook-test/save-profile",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(profile)
-            }
-        );
-
-        const text = await response.text();
-        console.log("RAW RESPONSE:", text);
-
-        let data = {};
+        const profile = {
+            name: document.getElementById("name").value,
+            age: document.getElementById("age").value,
+            school: document.getElementById("school").value,
+            bio: document.getElementById("bio").value,
+            interests: interests
+        };
 
         try {
-            data = JSON.parse(text);
-        } catch (err) {
-            // fallback if backend returns plain text
-            data = { message: text };
-        }
-        if (response.ok) {
-            showPopup(data.message || "Profile saved successfully! 🎉");
-            window.location.href = "chat.html";
-        } else {
-            showPopup(data.message || "Failed to save profile. Please try again.");
-        }
+            const response = await fetch(
+                "https://n8ngc.codeblazar.org/webhook-test/save-profile",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(profile)
+                }
+            );
 
-    } catch (error) {
-        console.error(error);
-        showPopup("Network error. Please check your connection.");
-    }
-});
+            const text = await response.text();
+            console.log("RAW RESPONSE:", text);
+
+            let data = {};
+
+            try {
+                data = JSON.parse(text);
+            } catch (err) {
+                // fallback if backend returns plain text
+                data = { message: text };
+            }
+            if (response.ok) {
+                // Needed by Find Friends on chat.html
+                localStorage.setItem("currentUser", profile.name);
+
+                showPopup(data.message || "Profile saved successfully! 🎉");
+                window.location.href = "chat.html";
+            } else {
+                showPopup(data.message || "Failed to save profile. Please try again.");
+            }
+
+        } catch (error) {
+            console.error(error);
+            showPopup("Network error. Please check your connection.");
+        }
+    });
+}
 
 // Show pop up message
 function showPopup(message) {
@@ -134,4 +139,82 @@ function showPopup(message) {
 
 function closePopup() {
     document.getElementById("popup").classList.add("hidden");
+}
+
+// ======================
+// FIND FRIENDS
+// ======================
+
+async function findFriends() {
+    const currentUser = localStorage.getItem("currentUser");
+
+    if (!currentUser) {
+        alert("Please create your profile first.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "https://n8ngc.codeblazar.org/webhook-test/find-friends",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: currentUser
+                })
+            }
+        );
+
+        const text = await response.text();
+        console.log("Find Friends Response:", text);
+
+        let matches = [];
+
+        try {
+            matches = JSON.parse(text);
+        } catch {
+            alert("No matches returned from workflow.");
+            return;
+        }
+
+        displayMatches(matches);
+
+    } catch (error) {
+        console.error(error);
+        alert("Unable to find friends.");
+    }
+}
+
+function displayMatches(matches) {
+    const container = document.getElementById("matches");
+    if (!container) return;
+
+    if (!matches || matches.length === 0) {
+        container.innerHTML = `<p class="no-matches">No friends found yet.</p>`;
+        return;
+    }
+
+    container.innerHTML = matches.map(m => `
+        <div class="friend-card">
+            <div class="friend-top">
+                <span class="friend-avatar">${String(m.name || "?").charAt(0).toUpperCase()}</span>
+                <h3>${m.name}</h3>
+                <span class="match-badge">${m.compatibility}% match</span>
+            </div>
+            <div class="interest-tags">
+                ${String(m.interests || "")
+                    .split(",")
+                    .filter(i => i.trim())
+                    .map(i => `<span class="tag">${i.trim()}</span>`)
+                    .join("")}
+            </div>
+            <button class="say-hi-btn" onclick="sayHi('${m.name}')">Say Hi</button>
+        </div>
+    `).join("");
+}
+
+function sayHi(friendName) {
+    alert(`You said hi to ${friendName}!`);
 }

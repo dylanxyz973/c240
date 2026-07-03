@@ -32,11 +32,18 @@
       <p class="subtext">Whatever's on your mind, we can take it at your pace.</p>
     </section>
 
-    <section>
-      <h1>Find Friends</h1>
-      <button onclick="findFriends()">Find Friends</button>
-      <div id="matches"></div>
-    </section>
+    <section class="friends-section">
+  <div class="friends-card">
+    <div class="friends-header">
+      <div>
+        <h2>Suggested Friends</h2>
+        <p class="friends-sub">Based on your interests</p>
+      </div>
+      <button class="find-btn" onclick="findFriends()">Find Friends</button>
+    </div>
+    <div id="matches" class="matches-grid"></div>
+  </div>
+</section>
 
     <!-- Botpress mounts here instead of the default floating bubble -->
     <!-- <section class="chat-panel" id="chat-mount" aria-label="Chat conversation"></section> -->

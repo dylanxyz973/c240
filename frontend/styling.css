@@ -646,3 +646,148 @@ footer {
   .steps { grid-template-columns: 1fr; }
   .lumi-inner { flex-direction: column; align-items: flex-start; text-align: left; }
 }
+
+/* ---------- Suggested Friends ---------- */
+
+.friends-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 2rem;
+}
+
+.friends-card {
+  background: #1e211e;
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.25rem 2.25rem;
+  box-shadow: 0 4px 24px rgba(38, 36, 32, 0.15);
+}
+
+.friends-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.friends-card h2 {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #f4f2ec;
+  margin: 0;
+}
+
+.friends-sub {
+  color: #8a8d86;
+  font-size: 0.95rem;
+  margin: 0.25rem 0 0;
+}
+
+.find-btn {
+  margin-top: 0;
+  background: #6b8c70;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.find-btn:hover { background: #5a785f; }
+
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.friend-card {
+  background: #262a26;
+  border: 1px solid #33372f;
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.friend-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.friend-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #eef2e6;
+  color: #4a5d4e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.friend-top h3 {
+  margin: 0;
+  color: #f4f2ec;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.15rem;
+  flex: 1;
+}
+
+.match-badge {
+  background: #eef2e6;
+  color: #3e5242;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.interest-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.1rem;
+}
+
+.interest-tags .tag {
+  background: #161916;
+  color: #e8e6df;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+}
+
+.say-hi-btn {
+  width: 100%;
+  margin-top: 0;
+  background: #7fa184;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.say-hi-btn:hover { background: #6b8c70; }
+
+.no-matches {
+  color: #8a8d86;
+  text-align: center;
+  margin: 0.5rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .friends-card { padding: 1.5rem 1.25rem; }
+  .friends-header { flex-direction: column; }
+}
