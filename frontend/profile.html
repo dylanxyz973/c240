@@ -97,7 +97,12 @@
     &copy; 2026 Beyond Four Walls. Built for C240.
   </footer>
 
-  <p id="statusMessage"></p>
+  <div id="popup" class="popup hidden">
+    <div class="popup-content">
+      <p id="popupMessage"></p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
   
   <script src="script.js"></script>
 
