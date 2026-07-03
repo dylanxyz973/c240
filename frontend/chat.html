@@ -32,62 +32,21 @@
       <p class="subtext">Whatever's on your mind, we can take it at your pace.</p>
     </section>
 
+    <section>
+      <h1>Find Friends</h1>
+      <button onclick="findFriends()">Find Friends</button>
+      <div id="matches"></div>
+    </section>
+
     <!-- Botpress mounts here instead of the default floating bubble -->
-    <section class="chat-panel" id="chat-mount" aria-label="Chat conversation"></section>
+    <!-- <section class="chat-panel" id="chat-mount" aria-label="Chat conversation"></section> -->
   </main>
 
   <!-- Botpress Webchat -->
   <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
   <script src="https://files.bpcontent.cloud/2026/05/12/04/20260512040002-3M3JEC0F.js" defer></script>
 
-  <!--
-    The script above auto-initializes Botpress as a floating widget (bottom-right
-    bubble). We don't have access to edit that hosted file directly, so instead we
-    tear down that floating instance once it's ready and re-init it targeting our
-    #chat-mount container. This is the same pattern Botpress's own team uses in
-    their official embed demo (codepen.io/botpress-team/pen/dPyXZMQ), it just
-    re-spreads the existing config rather than requiring your botId.
-  -->
-  <script>
-    window.addEventListener('load', function () {
-      function mountInline() {
-        try {
-          if (window.botpress.fabIframe) window.botpress.fabIframe.remove();
-          if (window.botpress.webchatIframe) window.botpress.webchatIframe.remove();
-          window.botpress.initialized = false;
-          window.botpress.init({
-            ...window.botpress,
-            configuration: {
-              ...window.botpress.configuration,
-              color: '#C96442',
-              variant: 'soft',
-              themeMode: 'light',
-              radius: 2,
-              fontFamily: 'Inter',
-            },
-            selector: '#chat-mount',
-          });
-          window.botpress.on('webchat:ready', function () {
-            window.botpress.open();
-          });
-        } catch (err) {
-          console.error('Could not mount Botpress inline:', err);
-        }
-      }
+  <script src="script.js"></script>
 
-      // Poll briefly for window.botpress since the generated script is deferred
-      var tries = 0;
-      var waitForBotpress = setInterval(function () {
-        tries++;
-        if (window.botpress && window.botpress.initialized) {
-          clearInterval(waitForBotpress);
-          mountInline();
-        } else if (tries > 40) {
-          clearInterval(waitForBotpress);
-          console.error('Botpress did not initialize in time.');
-        }
-      }, 250);
-    });
-  </script>
 </body>
 </html>

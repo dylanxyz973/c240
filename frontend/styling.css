@@ -269,7 +269,7 @@ input {
  
 /* Inline Botpress mount point, styled as a quiet card so it reads
    like a real page rather than a floating widget bubble */
-.chat-panel {
+/* .chat-panel {
   position: relative;
   z-index: 1;
   flex: 1;
@@ -279,11 +279,11 @@ input {
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 24px rgba(38, 36, 32, 0.05);
   overflow: hidden;
-}
+} */
  
 @media (max-width: 640px) {
   .chat-hero h1 { font-size: 1.9rem; }
-  .chat-panel { min-height: 70vh; border-radius: var(--radius-md); }
+  /* .chat-panel { min-height: 70vh; border-radius: var(--radius-md); } */
   header { padding: 16px 32px; }
 }
  
@@ -593,6 +593,36 @@ footer {
 
 .btn-save:hover {
   background-color: #5a785f;
+}
+
+/* Display matches */
+#matches {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.card {
+  width: 250px;
+  padding: 15px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score {
+  background: #3B3386;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 12px;
 }
 
 /* Responsive Breakdowns for tablet or smaller mobile devices */
