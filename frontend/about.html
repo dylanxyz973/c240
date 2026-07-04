@@ -1,29 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C240 - About</title>
+  <title>Beyond Four Walls - About Us</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="styling.css" />
 </head>
+
 <body>
-   <header>
+  <header>
     <nav>
       <a href="home.html" class="brand">Beyond Four Walls</a>
       <div class="nav-links">
         <a href="home.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="chat.html" class="active">Chat</a>
+        <a href="about.html" class="active">About Us</a>
+        <a href="chat.html">Chat</a>
         <a href="login.html">Login</a>
         <a href="signup.html" class="btn-nav">Sign Up</a>
       </div>
     </nav>
   </header>
 
+  <main>
+    <section class="hero about-hero">
+      <div class="about-hero-visual">
+        <img src="pics/image2.png" alt="Warm illustration of people talking" />
+      </div>
+      <p class="eyebrow">Curious about Us?</p>
+      <h1>A Safe Space Beyond Four Walls</h1>
+      <p class="lead">Beyond Four Walls is a chatbot website created to support confidence, reflection, and
+      connection in a calm and welcoming way to anyone.</p>
+    </section>
 
-  <main class="content-card">
-    <h1>About This Project</h1>
-    <p>This starter site includes a simple frontend and a lightweight backend server.</p>
+    <section class="about-grid" aria-label="About sections">
+      <article class="about-card">
+        <div class="about-card-header">
+          <span class="about-icon" aria-hidden="true">🐼</span>
+          <h2>Who We Are</h2>
+        </div>
+        <p>We are <strong>The Synergy Pandas</strong>, a team of students from <strong>Republic 
+          Polytechnic</strong> united by a shared passion for technology and mental 
+          wellness. <strong>Beyond Four Walls</strong> is our project, created with the goal 
+          of providing a safe and supportive space where users can reflect 
+          on their emotions, build healthy coping habits and gradually reconnect with the world around them. 
+          Through this project, we hope to show how AI can be used to promote emotional 
+          well-being and encourage meaningful conversations with others as well.</p>
+      </article>
+
+      <article class="about-card">
+        <div class="about-card-header">
+          <span class="about-icon" aria-hidden="true">🎯</span>
+          <h2>Our Purpose</h2>
+        </div>
+        <p>We have observed a growing trend of social withdrawal in Singapore,
+          supported by various studies and articles. This inspired us to reflect
+          on how we might contribute to addressing this issue in a meaningful way.
+          As a result, we developed this chatbot to support individuals who may be
+          struggling emotionally or feel hesitant to reach out to others. It also
+          aims to provide a gentle stepping stone for those who are ready to
+          reconnect and gradually re-engage with the world around them.
+</p>
+      </article>
+
+      <article class="about-card">
+        <div class="about-card-header">
+          <span class="about-icon" aria-hidden="true">🤖</span>
+          <h2>What Our Chatbot Does</h2>
+        </div>
+        <p>We built this chatbot to help you build confidence in forming meaningful
+          connections, practice everyday conversations, and offer guidance or support
+          whenever you need it. It can suggest conversation starters, help you find
+          people who share your interests, and give you a gentle boost when you are
+          feeling unsure, making it easier and more comfortable to take steps toward
+          connecting with others.</p>
+      </article>
+
+      <article class="about-card">
+        <div class="about-card-header">
+          <span class="about-icon" aria-hidden="true">📞</span>
+          <h2>Contact Us!</h2>
+        </div>
+        <p>Feel free to reach out to us if you have any questions about our website, WallBreakLumi(our chatbot) or if there is anything you would like to share with us! <br><br>
+        Contact us: BeyondFourWalls@gmail.com</p>
+      </article>
+
+    </section>
+
+    <section class="about-card disclaimer" aria-label="Disclaimer">
+      <div class="about-card-header">
+        <span class="about-icon" aria-hidden="true">⚠️</span>
+        <h2>Important Disclaimer</h2>
+      </div>
+      <p>This chatbot is intended for educational and supportive purposes only. It is not a substitute for professional
+        mental health care and does not provide medical advice, diagnoses, or emergency support.</p>
+    </section>
   </main>
+
+  <footer>
+    &copy; 2026 Beyond Four Walls. Built for C240.
+  </footer>
+
+  <script src="script.js"></script>
 </body>
+
 </html>

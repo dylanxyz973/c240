@@ -171,6 +171,80 @@ nav a.active {
   font-family: var(--serif);
   font-size: 2rem;
 }
+
+.about-hero {
+  max-width: 980px;
+  text-align: center;
+  padding: 4rem 2rem 2.5rem;
+}
+.about-grid {
+  max-width: 1080px;
+  margin: 0 auto 1.25rem;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.about-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  padding: 1.5rem;
+}
+
+.about-card h2 {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  margin: 0 0 0.7rem;
+}
+
+.about-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.disclaimer {
+  max-width: 1080px;
+  margin: 0 auto 3rem;
+  border-left: 4px solid var(--accent);
+}
+
+/* Visual accents for about page */
+.about-hero-visual {
+  margin-bottom: 1rem;
+}
+
+.about-hero-visual img {
+  width: 220px;
+  max-width: 100%;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(38, 36, 32, 0.08);
+}
+
+.about-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.about-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-hero-visual img { width: 160px; }
+}
  
 .btn, button {
   display: inline-block;
