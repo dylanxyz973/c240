@@ -216,85 +216,90 @@ function displayMatches(matches) {
 }
 
 let chatWith = null;
-let pollTimer = null;
 
-function sayHi(friendName) {
+async function sayHi(friendName) {
     chatWith = friendName;
+
     document.getElementById("chatTitle").textContent = friendName;
-    document.getElementById("chatAvatar").textContent = friendName.charAt(0).toUpperCase();
+    document.getElementById("chatAvatar").textContent =
+        friendName.charAt(0).toUpperCase();
     document.getElementById("chatPanel").classList.remove("hidden");
-    document.getElementById("icebreakerHint")?.classList.add("hidden"); // clear old hint
-    loadMessages();
-    clearInterval(pollTimer);
-    pollTimer = setInterval(loadMessages, 3000);
+
+    const box = document.getElementById("chatMessages");
+
+    // Clear old messages when opening a new chat
+    box.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            "https://n8ngc.codeblazar.org/webhook/say-hi",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    sender: localStorage.getItem("currentUser"),
+                    receiver: friendName,
+                    message: "Hello 👋"
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        // Show the hello message immediately
+        box.innerHTML += `
+            <div class="msg msg-me">
+                Hello 👋
+            </div>
+        `;
+        box.scrollTop = box.scrollHeight;
+
+        console.log("Hi sent!");
+    } catch (err) {
+        console.error("Failed to send hi:", err);
+        alert("Failed to send hi.");
+    }
 }
 
 function closeChat() {
-    console.log("Close button clicked!");
-    clearInterval(pollTimer);
     chatWith = null;
     document.getElementById("chatPanel").classList.add("hidden");
 }
 
-async function loadMessages() {
-    const me = localStorage.getItem("currentUser");
-    try {
-        const res = await fetch("https://n8ngc.codeblazar.org/webhook/get-messages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userA: me, userB: chatWith })
-        });
-        const msgs = await res.json();
-        renderMessages(msgs, me);
-    } catch (e) {
-        console.error(e);
-    }
-}
-
-function renderMessages(msgs, me) {
-    const box = document.getElementById("chatMessages");
-    box.innerHTML = (msgs || []).map(m => `
-        <div class="msg ${m.From === me ? "msg-me" : "msg-them"}">
-            ${m.Text}
-        </div>
-    `).join("");
-    box.scrollTop = box.scrollHeight;
-}
-
-async function sendMessage() {
-    const input = document.getElementById("msgInput");
-    const text = input.value.trim();
-    if (!text || !chatWith) return;
-    input.value = "";
-    await fetch("https://n8ngc.codeblazar.org/webhook/send-message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            from: localStorage.getItem("currentUser"),
-            to: chatWith,
-            text
-        })
-    });
-    loadMessages();
-}
-
 async function getIcebreaker() {
     if (!chatWith) return;
+
     const hint = document.getElementById("icebreakerHint");
     hint.classList.remove("hidden");
     hint.textContent = "Lumi is thinking…";
+
     try {
-        const res = await fetch("https://n8ngc.codeblazar.org/webhook/icebreaker", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                from: localStorage.getItem("currentUser"),
-                to: chatWith
-            })
-        });
+        const res = await fetch(
+            "https://n8ngc.codeblazar.org/webhook/icebreaker",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    from: localStorage.getItem("currentUser"),
+                    to: chatWith
+                })
+            }
+        );
+
         const data = await res.json();
-        hint.textContent = "💡 " + (data.suggestion || "Just say hi — being first is already brave!");
+
+        hint.textContent =
+            "💡 " +
+            (data.suggestion ||
+                "Just say hi — being first is already brave!");
     } catch (e) {
-        hint.textContent = "💡 Just say hi — being first is already brave!";
+        hint.textContent =
+            "💡 Just say hi — being first is already brave!";
     }
 }
