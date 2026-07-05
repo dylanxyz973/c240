@@ -22,136 +22,204 @@ body {
   line-height: 1.6;
 }
  
-/* ---------- Header ---------- */
- 
+/* ==========================================================================
+   THE CALM & FRIENDLY NAVBAR (FLOATING CLOUD OASIS)
+   ========================================================================== */
+
+/* The overarching header acts as the sky backdrop */
 header {
-  border-bottom: 1px solid var(--border);
-  padding: 0.9rem 2rem;
-  background: rgba(247, 245, 239, 0.85);
-  backdrop-filter: blur(8px);
+  padding: 1.2rem 2rem;
+  background: transparent; /* Removes the rigid background screen */
   position: sticky;
   top: 0;
   z-index: 10;
 }
  
+/* The inner nav transforms into a soft, cozy floating cloud pod */
 nav {
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  /* Semi-transparent background mixed with backdrop-filter creates true frosted glass */
+  background: rgba(255, 255, 255, 0.45); 
+  backdrop-filter: blur(20px) saturate(160%); 
+  -webkit-backdrop-filter: blur(20px) saturate(160%); /* Safari engine support */
+  
+  padding: 12px 32px; /* 👈 Increased right-side padding to keep avatar away from the edge */
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.6); /* Soft glistening border highlight */
+  box-shadow: 0 8px 32px rgba(107, 140, 112, 0.08);
+}
+
+/* Subtly interactive hover effect for the entire bar */
+nav:hover {
+  box-shadow: 0 12px 28px rgba(107, 140, 112, 0.1);
+  transform: translateY(1px);
+}
+
+/* Brand Text (Beyond Four Walls) */
+.brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #2c3330; /* A soft charcoal-green instead of harsh pure ink */
+  text-decoration: none;
+  letter-spacing: -0.2px;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px; /* Tighter gap because the items themselves will have inner padding */
 }
 
- .brand {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: var(--ink);
-  text-decoration: none;
-}
-
-nav a {
+/* Top-level Page Link Tabs */
+.nav-links > a {
   display: flex;
   align-items: center;
-  height: 44px;
-  color: var(--muted);
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px; /* Give individual links a soft shape */
+  color: #5c6460; /* Calmer muted tone */
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
  
-nav a:hover,
-nav a.active {
-  color: var(--ink);
-}
- 
-.btn-nav {
-  background: var(--ink);
-  color: #fff !important;
-  padding: 0 20px;
-  height: 44px;
-  border-radius: 999px;
-}
- 
-.btn-nav:hover {
-  background: var(--accent);
+/* Instead of a harsh underline, active items get a soft, welcoming sage glow */
+.nav-links > a:hover,
+.nav-links > a.active {
+  color: #1c2220;
+  background-color: #e2ede4; /* Your signature calm pale green */
 }
 
-/* Profile icon on nav links */
-
+/* --- The Profile Dropdown Area --- */
 .profile-dropdown {
   position: relative;
   display: flex;
   align-items: center;
 }
 
+/* Ensure the green circle itself doesn't have hidden margins pushing it around */
 .avatar-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: none;
-  background: #6b8c70;
-  color: #fff;
-  font-weight: 600;
-  line-height: 1;
+  background: #6b8c70; 
   cursor: pointer;
+  padding: 0;
+  margin: 0; /* 👈 Locks the green circle perfectly in place within the navbar */
+  box-shadow: 0 4px 12px rgba(107, 140, 112, 0.15);
+  transition: transform 0.2s ease;
 }
 
-/* Dropdown Menu */
+/* 1. The Invisible Bounding Box (Wraps the whole person) */
+.user-icon {
+  position: relative;
+  display: block;
+  width: 22px;  /* Matches the width of the shoulders */
+  height: 27px; /* Exact total height of the head + gap + shoulders */
+}
+
+/* 2. The Head (Pinned to the top of the bounding box) */
+.user-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+/* 3. The Shoulders (Pinned to the bottom of the bounding box) */
+.user-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 11px;
+  background: #ffffff;
+  border-radius: 12px 12px 0 0;
+}
+
+/* --- Dark Dropdown Panel Fixes --- */
 .dropdown-menu {
   display: none;
   position: absolute;
   right: 0;
   top: 100%;
-  margin-top: 8px;
-  background-color: #1a1a19; 
-  border: 1px solid #333332;
-  border-radius: 8px;
-  width: 180px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  margin-top: 12px; /* Extra breathing space */
+  background-color: #242926; /* Deep organic forest-charcoal instead of stark pure black */
+  border: 1px solid #323a35;
+  border-radius: 16px; /* Match the rounded pillow aesthetic */
+  width: 190px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   z-index: 9999;
   overflow: hidden;
+  padding: 6px; /* Acts as an inner frame */
 }
 
 .dropdown-menu.show {
   display: block;
+  animation: floatIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
 .dropdown-menu a {
-  display: flex;
+  display: flex !important;
   align-items: center;
-  padding: 12px 16px;
-  color: #e0e0e0;
+  width: 100%;
+  height: auto !important;
+  padding: 10px 14px;
+  color: #e2ede4 !important; /* Gentle sage-tinted off-white text */
   text-decoration: none;
   font-size: 0.9rem;
   font-family: 'Inter', sans-serif;
-  border-bottom: 1px solid #282827;
-  transition: background-color 0.2s;
+  border-radius: 10px; /* Rounded interior links */
+  border-bottom: none; /* Removed the ugly legal-document underline separators */
+  transition: background-color 0.2s ease;
+  margin-bottom: 2px;
 }
 
 .dropdown-menu a:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .dropdown-menu a:hover {
-  background-color: #262625;
+  background-color: #323a35 !important;
+  color: #ffffff !important;
 }
 
 .dropdown-menu a.logout-link {
-  color: #ff6b6b; /* Red accent coloring */
+  color: #ff8b8b !important; /* A softer coral-red instead of alarming crimson */
 }
 
 .dropdown-menu a .icon {
   margin-right: 10px;
+}
+
+/* Gentle reveal animation for the cloud dropdown */
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
  
 /* ---------- Generic content cards (kept for other pages) ---------- */
@@ -1158,4 +1226,209 @@ footer {
     bottom: 12px;
   }
   .chat-messages { height: 260px; }
+}
+
+/* ==========================================================================
+   CLEAN ACCORDION FAQ STYLES
+   ========================================================================== */
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.faq-container h1 {
+  font-family: var(--serif);
+}
+
+.faq-main-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.faq-sub-title {
+  font-size: 1rem;
+  color: #4B5563;
+  margin-bottom: 2rem;
+}
+
+/* Individual Accordion Rows */
+.faq-item {
+  background: #FAFAF9;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* Hover style when hovering over the row */
+.faq-item:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+}
+
+/* Style the question summary container */
+.faq-question {
+    display: flex; /* 👈 Using flex keeps positioning robust and clickable */
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 15px 0 15px 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    user-select: none; /* Prevents text highlighting on double clicks */
+}
+
+/* Hide the unpredictable browser default markers completely */
+.faq-item summary::-webkit-details-marker,
+.faq-question::marker {
+    display: none !important;
+}
+
+/* 1. Put the classic triangle symbol in using a pseudo-element */
+.faq-question::before {
+    content: "▶"; /* Classic closed triangle pointing right */
+    font-size: 0.8rem;
+    color: #6B7280; /* Neutral gray tone */
+    transition: transform 0.2s ease;
+}
+
+/* 2. Rotate it downwards automatically when the details parent is open! */
+.faq-item[open] .faq-question::before {
+    transform: rotate(90deg); /* Rotates the right-pointing triangle downwards */
+    color: #000000;
+}
+
+/* Hidden Answer Reveal Container Zone */
+.faq-answer {
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  color: #4B5563;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  border-top: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   UPDATED PRIVACY POLICY PAGE STYLES
+   ========================================================================= */
+
+/* Flex column setup forces elements to stack vertically instead of side-by-side */
+.policy-container {
+    background-color: #fcfbf7; /* Matches your warm off-white background tint precisely */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* 👈 Forces footer to sit underneath the card */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 60px 20px;
+    width: 100%;
+}
+
+.policy-container h1 {
+  font-family: var(--serif);
+}
+
+
+/* Document content card */
+.policy-card {
+    background-color: #ffffff;
+    max-width: 800px;
+    width: 100%;
+    padding: 50px 60px;
+    border-radius: 16px;
+    /* Subtle layout separation lines instead of heavy shadows */
+    border: 1px solid #eae9e4; 
+    margin-bottom: 40px; /* 👈 Gives breathing room before the footer starts */
+}
+
+.policy-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    color: #1a1a1a;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.policy-meta {
+    font-size: 14px;
+    color: #888888;
+    margin-bottom: 24px;
+}
+
+.policy-divider {
+    border: 0;
+    height: 1px;
+    background-color: #eae9e4;
+    margin-bottom: 35px;
+}
+
+.policy-section {
+    margin-bottom: 32px;
+}
+
+.policy-section h2 {
+    font-size: 20px;
+    color: #1a1a1a;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.policy-section p {
+    font-size: 15px;
+    color: #444444;
+    line-height: 1.65;
+}
+
+/* Center button spacing */
+.policy-footer {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.back-home-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: #1a1a1a;
+    background-color: #d6e2ff; 
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.15s ease;
+}
+
+.back-home-btn:hover {
+    background-color: #c2d4ff;
+}
+
+/* --- THE FOOTER TEXT (Pushed cleanly below the card) --- */
+.policy-copyright-text {
+    font-size: 13px;
+    color: #8a8985;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding-top: 20px;
+    border-top: 1px solid #eae9e4; /* Optional clean line breaking the footer out */
+}
+
+/* Mobile responsive constraints */
+@media (max-width: 600px) {
+    .policy-card {
+        padding: 30px 24px;
+    }
+    .policy-title {
+        font-size: 28px;
+    }
 }

@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>C240 - Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="styling.css" />
 </head>
+
 <body>
   <header>
     <nav>
@@ -17,10 +21,12 @@
         <a href="home.html" class="active">Home</a>
         <a href="about.html">About Us</a>
         <a href="chat.html">Chat</a>
-
         <div class="profile-dropdown" id="profileDropdown">
           <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
-            aria-expanded="false">profile</button>
+            aria-expanded="false">
+            <span class="user-icon"></span>
+          </button>
+
           <div class="dropdown-menu" id="dropdownMenu">
             <a href="profile.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
             <a href="#" id="logoutOpt" class="logout-link"><span class="icon">🚪</span> Logout</a>
@@ -74,7 +80,7 @@
     <div class="chat-input-row">
       <button class="icebreaker-btn" onclick="getIcebreaker()" title="Ask Lumi for an icebreaker">✨</button>
       <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off"
-            onkeydown="if(event.key==='Enter') sendMessage()" />
+        onkeydown="if(event.key==='Enter') sendMessage()" />
       <button class="say-hi-btn chat-send" onclick="sendMessage()" aria-label="Send">➤</button>
     </div>
   </div>
@@ -97,4 +103,5 @@
   <script src="script.js"></script>
 
 </body>
+
 </html>

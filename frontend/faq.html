@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beyond Four Walls</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styling.css" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="home.html" class="brand">Beyond Four Walls</a>
+      <div class="nav-links">
+        <a href="home.html" class="active">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="chat.html">Chat</a>
+
+        <div class="profile-dropdown" id="profileDropdown">
+          <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
+            aria-expanded="false">
+            <span class="user-icon"></span>
+          </button>
+
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="profile.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
+            <a href="#" id="logoutOpt" class="logout-link"><span class="icon">🚪</span> Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="faq-container">
+    <h1>Frequently Asked Questions</h1>
+    <details class="faq-item" open>
+      <summary class="faq-question">What is the main purpose of WallBreak Lumi?</summary>
+      <div class="faq-answer">
+        <p>WallBreak Lumi was created to support individuals who may be struggling emotionally, feeling socially
+          isolated, or hesitant to reach out to others. Our goal is to offer a gentle stepping stone for those ready to
+          build confidence, practice interactions, and gradually re-engage with the world around them.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary class="faq-question">How can the chatbot help me practice everyday conversations?</summary>
+      <div class="faq-answer">
+        <p>Lumi acts as a safe, completely judgment-free space. It can suggest engaging conversation starters, simulate
+          daily social scenarios, and help you practice expressing your ideas so you feel much more comfortable and
+          natural when talking to others in real life.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary class="faq-question">Can the chatbot help me find people with similar interests?</summary>
+      <div class="faq-answer">
+        <p>Yes! Beyond chatting, Lumi can guide you toward discovering activities, topics, and communities that align
+          with your personal interests, making it easier to take those first comfortable steps toward forming meaningful
+          real-world connections.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary class="faq-question">Is my emotional support data kept private?</summary>
+      <div class="faq-answer">
+        <p>Absolutely. Your emotional well-being and trust are our top priorities. All interactive chat histories are
+          encrypted and securely stored under your private profile, and we strictly ensure your data is never shared or
+          sold to third parties.</p>
+      </div>
+    </details>
+    </details>
+    <footer>
+      &copy; 2026 Beyond Four Walls. Built for C240.
+    </footer>
+  </div>
