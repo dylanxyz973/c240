@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profile - Beyond Four Walls</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F7F5EF;
+      --surface: #FFFFFF;
+      --surface-soft: #FFF8F0;
+      --ink: #262420;
+      --muted: #6F6B62;
+      --accent: #C96442;
+      --accent-soft: #F1DDD2;
+      --border: #E6E2D8;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --shadow: 0 16px 40px rgba(38, 36, 32, 0.08);
+      --serif: "Source Serif 4", Georgia, serif;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body[data-theme="dark"] {
+      --bg: #161514;
+      --surface: #1f1d1a;
+      --surface-soft: #27241f;
+      --ink: #f8f0e3;
+      --muted: #bbb1a4;
+      --accent: #F0A36B;
+      --accent-soft: #3f2a1d;
+      --border: #3b352f;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      background: rgba(247, 245, 239, 0.86);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    body[data-theme="dark"] header {
+      background: rgba(22, 21, 20, 0.86);
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .edit-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      margin: 0 0 2rem 0;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+    }
+
+    .avatar-upload-section {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+
+    .avatar-upload-section label:first-child {
+      cursor: pointer;
+    }
+
+    .avatar-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--surface);
+      font-size: 3rem;
+      font-weight: 600;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid var(--accent);
+      position: relative;
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-preview::after {
+      content: "📷";
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .avatar-upload-section label:first-child:hover .avatar-preview::after {
+      opacity: 1;
+    }
+
+    .upload-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface-soft);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .emoji-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .emoji-btn {
+      width: 50px;
+      height: 50px;
+      border: 2px solid var(--border);
+      background: var(--surface-soft);
+      border-radius: var(--radius-md);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .emoji-btn:hover {
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .emoji-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .chip-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .chip {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--border);
+      background: var(--surface-soft);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip:hover {
+      border-color: var(--accent);
+    }
+
+    .chip.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: flex-end;
+    }
+
+    .save-btn,
+    .cancel-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .save-btn {
+      background: var(--accent);
+      color: var(--surface);
+    }
+
+    .save-btn:hover {
+      background: var(--accent);
+      opacity: 0.9;
+    }
+
+    .cancel-btn {
+      background: var(--surface-soft);
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+
+    .cancel-btn:hover {
+      background: var(--border);
+    }
+
+    @media (max-width: 860px) {
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .avatar-upload-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .button-group {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 620px) {
+      header {
+        padding: 0.7rem 1rem;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+        font-size: 0.85rem;
+      }
+
+      .edit-form {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .avatar-preview {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .save-btn,
+      .cancel-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="home.html" class="brand">Beyond Four Walls</a>
+      <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="chat.html">Chat</a>
+        <a href="DisplayProfile.html">Profile</a>
+        <a href="login.html">Login</a>
+        <a href="signup.html" class="btn-nav">Sign Up</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <form class="edit-form" id="editProfileForm">
+      <h1>Edit Your Profile</h1>
+
+      <!-- Avatar Upload -->
+      <section class="section">
+        <div class="avatar-upload-section">
+          <label>
+            <div class="avatar-preview" id="avatarPreview">A</div>
+            <input type="file" accept="image/*" id="avatarInput" hidden />
+            <p class="upload-hint">Click to upload</p>
+          </label>
+        </div>
+      </section>
+
+      <!-- Basic Info -->
+      <section class="section">
+        <h2>Basic Information</h2>
+        <div class="field-grid">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="@alex" required />
+          </div>
+          <div class="form-group">
+            <label for="displayName">Display Name</label>
+            <input type="text" id="displayName" placeholder="Alex Tan" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="alex@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="ageRange">Age Range</label>
+            <select id="ageRange" required>
+              <option value="">Select age range</option>
+              <option value="Less than 13">Less than 13</option>
+              <option value="13-21">13-21</option>
+              <option value="22-32">22-32</option>
+              <option value="33-43">33-43</option>
+              <option value="43-53">43-53</option>
+              <option value="53 and above">53 and above</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bio -->
+      <section class="section">
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" placeholder="Tell us about yourself..."></textarea>
+        </div>
+      </section>
+
+      <!-- Mood Selector -->
+      <section class="section">
+        <h2>Current Mood</h2>
+        <div class="emoji-group">
+          <button type="button" class="emoji-btn" data-mood="😄">😄</button>
+          <button type="button" class="emoji-btn" data-mood="😊">😊</button>
+          <button type="button" class="emoji-btn" data-mood="😍">😍</button>
+          <button type="button" class="emoji-btn" data-mood="😔">😔</button>
+          <button type="button" class="emoji-btn" data-mood="😢">😢</button>
+          <button type="button" class="emoji-btn" data-mood="😎">😎</button>
+          <button type="button" class="emoji-btn" data-mood="🤔">🤔</button>
+          <button type="button" class="emoji-btn" data-mood="😤">😤</button>
+          <button type="button" class="emoji-btn" data-mood="😡">😡</button>
+        </div>
+        <input type="hidden" id="mood" value="😄" />
+      </section>
+
+      <!-- Interests -->
+      <section class="section">
+        <h2>Interests & Hobbies</h2>
+        <div class="chip-section">
+          <button type="button" class="chip" data-interest="Gaming">Gaming</button>
+          <button type="button" class="chip" data-interest="Anime">Anime</button>
+          <button type="button" class="chip" data-interest="Music">Music</button>
+          <button type="button" class="chip" data-interest="Sports">Sports</button>
+          <button type="button" class="chip" data-interest="Reading">Reading</button>
+          <button type="button" class="chip" data-interest="Art">Art</button>
+        </div>
+        <input type="hidden" id="interests" value="" />
+      </section>
+
+      <!-- Goal Setting -->
+      <section class="section">
+        <div class="form-group">
+          <label for="goal">Goal Setting</label>
+          <textarea id="goal" placeholder="What's your goal?"></textarea>
+        </div>
+      </section>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+        <button type="submit" class="save-btn">Save Changes</button>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // Load saved data from localStorage
+    function loadProfile() {
+      const saved = localStorage.getItem('profileDraft');
+      if (saved) {
+        const profile = JSON.parse(saved);
+
+        // Avatar
+        if (profile.avatar) {
+          document.getElementById('avatarPreview').innerHTML = '<img src="' + profile.avatar + '" />';
+        }
+
+        // Basic info
+        document.getElementById('username').value = profile.username || '';
+        document.getElementById('displayName').value = profile.displayName || '';
+        document.getElementById('email').value = profile.email || '';
+        document.getElementById('ageRange').value = profile.ageRange || '';
+        document.getElementById('bio').value = profile.bio || '';
+        document.getElementById('goal').value = profile.goal || '';
+
+        // Mood
+        const mood = profile.mood || '😄';
+        document.getElementById('mood').value = mood;
+        document.querySelectorAll('.emoji-btn').forEach(btn => {
+          if (btn.dataset.mood === mood) {
+            btn.classList.add('active');
+          }
+        });
+
+        // Interests
+        if (profile.interests && profile.interests.length > 0) {
+          document.querySelectorAll('.chip').forEach(chip => {
+            if (profile.interests.includes(chip.dataset.interest)) {
+              chip.classList.add('active');
+            }
+          });
+          document.getElementById('interests').value = profile.interests.join(',');
+        }
+      }
+    }
+
+    // Avatar upload
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    avatarInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          avatarPreview.innerHTML = '<img src="' + event.target.result + '" />';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Mood selector
+    document.querySelectorAll('.emoji-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('mood').value = btn.dataset.mood;
+      });
+    });
+
+    // Interest chips
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        e.preventDefault();
+        chip.classList.toggle('active');
+        updateInterests();
+      });
+    });
+
+    function updateInterests() {
+      const selected = Array.from(document.querySelectorAll('.chip.active'))
+        .map(chip => chip.dataset.interest);
+      document.getElementById('interests').value = selected.join(',');
+    }
+
+    // Save profile
+    document.getElementById('editProfileForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const profile = {
+        username: document.getElementById('username').value,
+        displayName: document.getElementById('displayName').value,
+        email: document.getElementById('email').value,
+        ageRange: document.getElementById('ageRange').value,
+        bio: document.getElementById('bio').value,
+        goal: document.getElementById('goal').value,
+        mood: document.getElementById('mood').value,
+        interests: document.getElementById('interests').value ? document.getElementById('interests').value.split(',') : [],
+        avatar: avatarPreview.querySelector('img') ? avatarPreview.querySelector('img').src : null
+      };
+
+      localStorage.setItem('profileDraft', JSON.stringify(profile));
+      window.location.href = 'DisplayProfile.html';
+    });
+
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      window.location.href = 'DisplayProfile.html';
+    });
+
+    // Load on page load
+    loadProfile();
+  </script>
+</body>
+</html>
