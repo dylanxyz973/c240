@@ -25,12 +25,14 @@
 
   <main class="content-card">
     <h1>Login</h1>
-    <form>
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
+    <form action="/login" method="POST">
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Log In</button>
-      <button tupe="submit">Forget password</button>
     </form>
+    <p><a href="forgot-password.html">Forgot password?</a></p>
+    <p><a href="signup.html">Create an account</a></p>
   </main>
 </body>
 </html>
+
