@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (logoutOpt) {
         logoutOpt.addEventListener("click", (event) => {
             event.preventDefault();
-            if (confirm("Are you sure you want to log out?")) {
+            showConfirmPopup("We'll miss you! Ready to log out?", () => {
                 window.location.href = "login.html";
-            }
+            });
         });
     }
 
@@ -73,7 +73,61 @@ const form = document.getElementById("profileForm");
 
 // popup function
 function showPopup(message) {
-    alert(message);
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+    const popupOkBtn = document.getElementById("popupOkBtn");
+    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
+    const popupCancelBtn = document.getElementById("popupCancelBtn");
+
+    if (!popup || !popupMessage) return;
+
+    popupMessage.textContent = message;
+
+    if (popupOkBtn) {
+        popupOkBtn.textContent = "OK";
+        popupOkBtn.classList.remove("hidden");
+    }
+    if (popupConfirmBtn) {
+        popupConfirmBtn.textContent = "Yes";
+        popupConfirmBtn.classList.add("hidden");
+    }
+    if (popupCancelBtn) {
+        popupCancelBtn.textContent = "No";
+        popupCancelBtn.classList.add("hidden");
+    }
+
+    popup.classList.remove("hidden");
+}
+
+function showConfirmPopup(message, onConfirm) {
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+    const popupOkBtn = document.getElementById("popupOkBtn");
+    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
+    const popupCancelBtn = document.getElementById("popupCancelBtn");
+
+    if (!popup || !popupMessage) return;
+
+    popupMessage.textContent = message;
+
+    if (popupOkBtn) {
+        popupOkBtn.textContent = "OK";
+        popupOkBtn.classList.add("hidden");
+    }
+    if (popupConfirmBtn) {
+        popupConfirmBtn.textContent = "Yes";
+        popupConfirmBtn.classList.remove("hidden");
+        popupConfirmBtn.onclick = () => {
+            popup.classList.add("hidden");
+            onConfirm();
+        };
+    }
+    if (popupCancelBtn) {
+        popupCancelBtn.classList.remove("hidden");
+        popupCancelBtn.onclick = () => popup.classList.add("hidden");
+    }
+
+    popup.classList.remove("hidden");
 }
 
 if (form) {
@@ -131,14 +185,9 @@ if (form) {
     });
 }
 
-// Show pop up message
-function showPopup(message) {
-    document.getElementById("popupMessage").textContent = message;
-    document.getElementById("popup").classList.remove("hidden");
-}
-
 function closePopup() {
-    document.getElementById("popup").classList.add("hidden");
+    const popup = document.getElementById("popup");
+    if (popup) popup.classList.add("hidden");
 }
 
 // ======================

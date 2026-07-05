@@ -18,13 +18,21 @@
     <nav>
       <a href="home.html" class="brand">Beyond Four Walls</a>
       <div class="nav-links">
-        <a href="home.html">Home</a>
-        <a href="about.html" class="active">About Us</a>
+        <a href="home.html" class="active">Home</a>
+        <a href="about.html">About Us</a>
         <a href="chat.html">Chat</a>
-        <a href="login.html">Login</a>
-        <a href="signup.html" class="btn-nav">Sign Up</a>
+
+        <div class="profile-dropdown" id="profileDropdown">
+          <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
+            aria-expanded="false">profile</button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="profile.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
+            <a href="#" id="logoutOpt" class="logout-link"><span class="icon">🚪</span> Logout</a>
+          </div>
+        </div>
       </div>
     </nav>
+    
   </header>
 
   <main>
@@ -105,6 +113,17 @@
   <footer>
     &copy; 2026 Beyond Four Walls. Built for C240.
   </footer>
+
+  <div id="popup" class="popup hidden">
+    <div class="popup-content">
+      <p id="popupMessage"></p>
+      <div class="popup-actions">
+        <button id="popupCancelBtn" type="button" class="btn btn-secondary hidden">No</button>
+        <button id="popupConfirmBtn" type="button" class="btn btn-save hidden">Yes</button>
+        <button id="popupOkBtn" type="button" class="btn btn-save" onclick="closePopup()">OK</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
