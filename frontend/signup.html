@@ -25,12 +25,13 @@
 
   <main class="content-card">
     <h1>Create Account</h1>
-    <form>
-      <input type="text" placeholder="Full Name" />
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
+    <form action="/signup" method="POST">
+      <input type="text" name="fullName" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Sign Up</button>
     </form>
+    <p><a href="/login">Already have an account?</a></p>
   </main>
 </body>
 </html>
