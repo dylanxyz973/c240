@@ -76,5 +76,14 @@
     "email": "hello@gmail.com",
     "password": "$2a$10$N7AXbSCYgtynEa9yrz6PBe/7837NsnEpxF1.8KKUJ3EsGT6KasBEO",
     "created_at": "2026-07-06T05:57:50.993Z"
+  },
+  {
+    "id": 13,
+    "username": "Kaleb2",
+    "name": "Kaleb2",
+    "interests": [],
+    "email": "kaleb2@gmail.com",
+    "password": "$2a$10$mD9TIyPrK7/Y7HS.V9Z.a.A8vOnMxfOyzthwDrbV/fgSk/UW.WWSC",
+    "created_at": "2026-07-06T06:28:12.866Z"
   }
 ]
