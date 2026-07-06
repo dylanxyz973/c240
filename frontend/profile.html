@@ -30,7 +30,7 @@
           </button>
 
           <div class="dropdown-menu" id="dropdownMenu">
-            <a href="profile.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
+            <a href="profile-display.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
             <a href="#" id="logoutOpt" class="logout-link"><span class="icon">🚪</span> Logout</a>
           </div>
         </div>
@@ -59,10 +59,14 @@
 
       <form id="profileForm">
         <div class="form-row">
-          <div class="form-group">
+          <div class="form-group">            
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Alex Tan" required />
+            <input type="text" id="name" name="name" placeholder="alex" required />
           </div>
+        </div>
+
+        <div class="form-row">
+          
           <div class="form-group form-group-short">
             <label for="age">Age</label>
             <input type="number" id="age" name="age" placeholder="22" required min="0" max="120" />
@@ -132,7 +136,7 @@
       <p id="popupMessage"></p>
       <div class="popup-actions">
         <button id="popupCancelBtn" type="button" class="btn btn-secondary hidden">No</button>
-        <button id="popupConfirmBtn" type="button" class="btn btn-save hidden">Yes</button>
+        <button id="popupConfirmBtn" type="button" class="btn btn-save hidden" onclick="">Yes</button>
         <button id="popupOkBtn" type="button" class="btn btn-save" onclick="closePopup()">OK</button>
       </div>
     </div>

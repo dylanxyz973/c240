@@ -1,9 +1,106 @@
+const PROFILE_STORAGE_KEY = "userProfile";
+
+function loadStoredProfile() {
+    const stored = localStorage.getItem(PROFILE_STORAGE_KEY);
+    if (!stored) return null;
+
+    try {
+        return JSON.parse(stored);
+    } catch (err) {
+        console.warn("Could not parse stored profile", err);
+        return null;
+    }
+}
+
+function saveStoredProfile(profile) {
+    if (!profile) return;
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+}
+
+function loadStoredAuth() {
+    return {
+        name: localStorage.getItem('loggedInUser') || ''
+    };
+}
+
+function getCurrentProfileData() {
+    const savedProfile = loadStoredProfile() || {};
+    const authProfile = loadStoredAuth();
+
+    return {
+        name: savedProfile.name || authProfile.name || '',
+        age: savedProfile.age || '',
+        school: savedProfile.school || '',
+        bio: savedProfile.bio || '',
+        interests: Array.isArray(savedProfile.interests) ? savedProfile.interests : []
+    };
+}
+
+function populateProfileForm(profile) {
+    if (!profile) return;
+
+    const fields = ["name", "age", "school", "bio"];
+    fields.forEach((field) => {
+        const input = document.getElementById(field);
+        if (input && profile[field] != null) {
+            input.value = profile[field];
+        }
+    });
+
+    document.querySelectorAll('input[name="interests"]').forEach((input) => {
+        input.checked = Array.isArray(profile.interests) && profile.interests.includes(input.value);
+    });
+}
+
+function populateProfileDisplay(profile) {
+    const emptyMessage = document.getElementById("emptyProfileMessage");
+    const displayName = document.getElementById("displayName");
+    const displayAge = document.getElementById("displayAge");
+    const displaySchool = document.getElementById("displaySchool");
+    const displayBio = document.getElementById("displayBio");
+    const displayInterests = document.getElementById("displayInterests");
+
+    const hasProfile = profile && (
+        profile.name || profile.age || profile.school || profile.bio ||
+        (Array.isArray(profile.interests) && profile.interests.length)
+    );
+
+    if (!hasProfile) {
+        if (emptyMessage) emptyMessage.classList.remove("hidden");
+        if (displayName) displayName.textContent = "-";
+        if (displayAge) displayAge.textContent = "-";
+        if (displaySchool) displaySchool.textContent = "-";
+        if (displayBio) displayBio.textContent = "-";
+        if (displayInterests) displayInterests.innerHTML = "";
+        return;
+    }
+
+    if (emptyMessage) emptyMessage.classList.add("hidden");
+    if (displayName) displayName.textContent = profile.name || "-";
+    if (displayAge) displayAge.textContent = profile.age || "-";
+    if (displaySchool) displaySchool.textContent = profile.school || "-";
+    if (displayBio) displayBio.textContent = profile.bio || "-";
+
+    if (displayInterests) {
+        if (Array.isArray(profile.interests) && profile.interests.length) {
+            displayInterests.innerHTML = profile.interests.map((interest) => `
+                <span class="tag">${interest}</span>
+            `).join("");
+        } else {
+            displayInterests.innerHTML = `<span class="tag">No interests selected</span>`;
+        }
+    }
+}
+
+const form = document.getElementById("profileForm");
+
 // Profile icon on header
 document.addEventListener("DOMContentLoaded", () => {
-
     const avatarBtn = document.getElementById("avatarBtn");
     const dropdownMenu = document.getElementById("dropdownMenu");
     const logoutOpt = document.getElementById("logoutOpt");
+    const editProfileBtn = document.getElementById("editProfileBtn");
+    const storedProfile = getCurrentProfileData();
 
     if (avatarBtn && dropdownMenu) {
         avatarBtn.addEventListener("click", (event) => {
@@ -23,6 +120,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = "login.html";
             });
         });
+    }
+
+    if (editProfileBtn) {
+        populateProfileDisplay(storedProfile);
+        editProfileBtn.addEventListener("click", () => {
+            window.location.href = "profile.html";
+        });
+    }
+
+    if (form) {
+        populateProfileForm(storedProfile);
     }
 
 });
@@ -67,9 +175,6 @@ window.addEventListener('load', function () {
         }
     }, 250);
 });
-
-// Profile form
-const form = document.getElementById("profileForm");
 
 // popup function
 function showPopup(message) {
@@ -168,12 +273,14 @@ if (form) {
                 // fallback if backend returns plain text
                 data = { message: text };
             }
-            if (response.ok) {
+                    if (response.ok) {
                 // Needed by Find Friends on chat.html
+                saveStoredProfile(profile);
                 localStorage.setItem("currentUser", profile.name);
+                localStorage.setItem('loggedInUser', profile.name);
 
                 showPopup(data.message || "Profile saved successfully! 🎉");
-                window.location.href = "chat.html";
+                window.location.href = "profile-display.html";
             } else {
                 showPopup(data.message || "Failed to save profile. Please try again.");
             }

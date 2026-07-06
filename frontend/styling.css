@@ -594,7 +594,57 @@ footer {
   pointer-events: none;
 }
 
-.profile-intro {
+.profile-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.profile-card-header .edit-profile-btn {
+  margin-left: auto;
+  white-space: nowrap;
+  padding: 12px 22px;
+}
+
+.profile-details {
+  display: grid;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(38, 36, 32, 0.08);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 700;
+  color: #262420;
+  min-width: 130px;
+}
+
+.detail-row span {
+  color: #4d4a44;
+  line-height: 1.6;
+}
+
+.interests-display .tag {
+  background: rgba(38, 36, 32, 0.08);
+  color: #262420;
+  border: none;
+}
+
+.profile-note {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -739,6 +789,31 @@ footer {
   background: #ffffff;
   transform: translateY(-1px);
   border-color: rgba(38, 36, 32, 0.2);
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.password-field input {
+  flex: 1;
+}
+
+.password-toggle {
+  border: 1px solid rgba(38, 36, 32, 0.14);
+  background: #ffffff;
+  color: #262420;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  padding: 0;
 }
 
 .interest-checkbox input {
