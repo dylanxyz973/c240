@@ -19,8 +19,9 @@
       <a href="home.html" class="brand">Beyond Four Walls</a>
       <div class="nav-links">
         <a href="home.html">Home</a>
-        <a href="about.html" >About Us</a>
+        <a href="about.html">About Us</a>
         <a href="chat.html" class="active">Chat</a>
+        <a href="find-friends.html">Find Friends</a>
         <div class="profile-dropdown" id="profileDropdown">
           <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
             aria-expanded="false">
@@ -39,55 +40,30 @@
   <main class="chat-page">
     <div class="chat-glow" aria-hidden="true"></div>
 
+    <!-- Hero: now covers both Lumi and friend-finding -->
     <section class="chat-hero">
-      <p class="eyebrow">A quiet space to talk</p>
+      <p class="eyebrow">Your space to connect</p>
       <h1>Hi, I'm Lumi.</h1>
-      <p class="subtext">Whatever's on your mind, we can take it at your pace.</p>
+      <p class="subtext">
+        Talk to me anytime, or let me introduce you to people who get you —
+        at your pace, no pressure.
+      </p>
     </section>
 
-    <section class="friends-section">
-      <div class="friends-card">
-        <div class="friends-header">
-          <div>
-            <h2>Suggested Friends</h2>
-            <p class="friends-sub">Based on your interests</p>
-          </div>
-          <button class="find-btn" onclick="findFriends()">Find Friends</button>
-        </div>
-        <div id="matches" class="matches-grid"></div>
-      </div>
-    </section>
-
-    <!-- Botpress mounts here instead of the default floating bubble -->
-    <!-- <section class="chat-panel" id="chat-mount" aria-label="Chat conversation"></section> -->
+  <div id="chatbot" class="chat-panel" aria-label="Lumi chatbot">
+    <iframe
+      src="https://cdn.botpress.cloud/webchat/v3.6/shareable.html?configUrl=https://files.bpcontent.cloud/2026/05/12/04/20260512040002-DAORQ82T.json"
+      width="100%" height="100%" frameborder="0" allow="clipboard-write; microphone" style="border:0;border-radius:12px;">
+    </iframe>
+  </div>
+  
   </main>
 
-  <!-- Floating friend-to-friend chat window -->
-  <div id="chatPanel" class="chat-float hidden" role="dialog" aria-label="Chat with friend">
-    <div class="chat-box-header">
-      <div class="chat-peer">
-        <span id="chatAvatar" class="friend-avatar chat-avatar-sm"></span>
-        <div>
-          <h3 id="chatTitle"></h3>
-          <p class="chat-status">Matched friend</p>
-        </div>
-      </div>
-      <button class="chat-close" onclick="closeChat()" aria-label="Close chat">✕</button>
-    </div>
-    <div id="chatMessages" class="chat-messages"></div>
-    <div id="sharedInterests" class="shared-interests hidden"></div>
-    <div id="icebreakerHint" class="icebreaker-hint hidden"></div>
-    <div class="chat-input-row">
-      <button class="icebreaker-btn" onclick="getIcebreaker()" title="Ask Lumi for an icebreaker">✨</button>
-      <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off"
-        onkeydown="if(event.key==='Enter') sendMessage()" />
-      <button class="say-hi-btn chat-send" onclick="sendMessage()" aria-label="Send">➤</button>
-    </div>
-  </div>
 
   <!-- Botpress Webchat -->
-  <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+  <!-- <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
   <script src="https://files.bpcontent.cloud/2026/05/12/04/20260512040002-3M3JEC0F.js" defer></script>
+    
 
   <div id="popup" class="popup hidden">
     <div class="popup-content">
@@ -98,7 +74,7 @@
         <button id="popupOkBtn" type="button" class="btn btn-save" onclick="closePopup()">OK</button>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <script src="script.js"></script>
 

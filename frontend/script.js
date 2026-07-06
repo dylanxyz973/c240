@@ -142,7 +142,19 @@ window.addEventListener('load', function () {
             if (window.botpress.fabIframe) window.botpress.fabIframe.remove();
             if (window.botpress.webchatIframe) window.botpress.webchatIframe.remove();
             window.botpress.initialized = false;
-            window.botpress.init({
+
+            // Prefer an element with id 'chatbot' (user-provided). Fall back to 'chat-mount' if present.
+            var containerSelector = null;
+            if (document.getElementById('chatbot')) containerSelector = '#chatbot';
+            else if (document.getElementById('chat-mount')) containerSelector = '#chat-mount';
+            else containerSelector = 'body'; // last resort - attach to body
+
+            // Determine the container element and read an optional data-config-url attribute from it.
+            var containerEl = document.querySelector(containerSelector);
+            // Optional remote config JSON (shareable config). Prefer the data-config-url attribute on the container.
+            var remoteConfigUrl = (containerEl && containerEl.dataset && containerEl.dataset.configUrl) || 'https://files.bpcontent.cloud/2026/05/12/04/20260512040002-DAORQ82T.json';
+
+            var initOptions = {
                 ...window.botpress,
                 configuration: {
                     ...window.botpress.configuration,
@@ -152,10 +164,72 @@ window.addEventListener('load', function () {
                     radius: 2,
                     fontFamily: 'Inter',
                 },
-                selector: '#chat-mount',
-            });
+                selector: containerSelector,
+            };
+
+            // If a remote config JSON is provided, pass it through so Botpress uses that configuration
+            if (remoteConfigUrl) {
+                initOptions.configUrl = remoteConfigUrl;
+            }
+
+            window.botpress.init(initOptions);
             window.botpress.on('webchat:ready', function () {
-                window.botpress.open();
+                // Inline chat is mounted into the selected container.
+                // Do not call botpress.open() so the chat stays embedded instead of popping up.
+
+                // Remove any floating FAB/popup that the Botpress script may have added.
+                function removeFloating() {
+                    try {
+                        // Known references
+                        if (window.botpress && window.botpress.fabIframe) {
+                            window.botpress.fabIframe.remove();
+                        }
+                        if (window.botpress && window.botpress.webchatIframe && window.botpress.webchatIframe !== window.botpress._iframe) {
+                            // remove any leftover iframe that is not our inline mount
+                            window.botpress.webchatIframe.remove();
+                        }
+
+                        // Generic selectors to catch common floating elements
+                        var selectors = [
+                            '.bp-fab', '.botpress-fab', '.bp-widget', '.botpress-widget', '.webchat-fab', '[data-botpress-fab]'
+                        ];
+                        selectors.forEach(function (s) {
+                            document.querySelectorAll(s).forEach(function (el) { el.remove(); });
+                        });
+
+                        // Remove iframes that look like botpress popups
+                        document.querySelectorAll('iframe').forEach(function (ifrm) {
+                            try {
+                                var src = ifrm.getAttribute('src') || '';
+                                if (/botpress|bpcontent|bp-webchat/.test(src)) ifrm.remove();
+                            } catch (e) { }
+                        });
+                    } catch (e) {
+                        console.warn('Error removing floating botpress elements', e);
+                    }
+                }
+
+                removeFloating();
+
+                // Watch briefly for DOM nodes that match floating selectors and remove them if they appear
+                var observer = new MutationObserver(function (mutations, obs) {
+                    var found = false;
+                    mutations.forEach(function (m) {
+                        m.addedNodes.forEach(function (n) {
+                            if (!(n instanceof HTMLElement)) return;
+                            var outer = n.outerHTML || '';
+                            if (/botpress|bp-fab|bp-widget|botpress-fab|webchat-fab/i.test(outer)) {
+                                found = true;
+                                try { n.remove(); } catch (e) { }
+                            }
+                        });
+                    });
+                    if (found) removeFloating();
+                });
+
+                // Observe for a short window (5s) to catch late insertions
+                observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+                setTimeout(function () { observer.disconnect(); }, 5000);
             });
         } catch (err) {
             console.error('Could not mount Botpress inline:', err);
@@ -176,96 +250,49 @@ window.addEventListener('load', function () {
     }, 250);
 });
 
-// popup function
+// Popup function
 function showPopup(message) {
-    const popup = document.getElementById("popup");
-    const popupMessage = document.getElementById("popupMessage");
-    const popupOkBtn = document.getElementById("popupOkBtn");
-    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
-    const popupCancelBtn = document.getElementById("popupCancelBtn");
-
-    if (!popup || !popupMessage) return;
-
-    popupMessage.textContent = message;
-
-    if (popupOkBtn) {
-        popupOkBtn.textContent = "OK";
-        popupOkBtn.classList.remove("hidden");
-    }
-    if (popupConfirmBtn) {
-        popupConfirmBtn.textContent = "Yes";
-        popupConfirmBtn.classList.add("hidden");
-    }
-    if (popupCancelBtn) {
-        popupCancelBtn.textContent = "No";
-        popupCancelBtn.classList.add("hidden");
-    }
-
-    popup.classList.remove("hidden");
-}
-
-function showConfirmPopup(message, onConfirm) {
-    const popup = document.getElementById("popup");
-    const popupMessage = document.getElementById("popupMessage");
-    const popupOkBtn = document.getElementById("popupOkBtn");
-    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
-    const popupCancelBtn = document.getElementById("popupCancelBtn");
-
-    if (!popup || !popupMessage) return;
-
-    popupMessage.textContent = message;
-
-    if (popupOkBtn) {
-        popupOkBtn.textContent = "OK";
-        popupOkBtn.classList.add("hidden");
-    }
-    if (popupConfirmBtn) {
-        popupConfirmBtn.textContent = "Yes";
-        popupConfirmBtn.classList.remove("hidden");
-        popupConfirmBtn.onclick = () => {
-            popup.classList.add("hidden");
-            onConfirm();
-        };
-    }
-    if (popupCancelBtn) {
-        popupCancelBtn.classList.remove("hidden");
-        popupCancelBtn.onclick = () => popup.classList.add("hidden");
-    }
-
-    popup.classList.remove("hidden");
+    alert(message);
 }
 
 if (form) {
     form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        const interests = [...document.querySelectorAll('input[name="interests"]:checked')]
-            .map(i => i.value);
+    console.log("✅ Save Profile button clicked");
 
-        const profile = {
-            name: document.getElementById("name").value,
-            age: document.getElementById("age").value,
-            school: document.getElementById("school").value,
-            bio: document.getElementById("bio").value,
-            interests: interests
-        };
+    const interests = [
+        ...document.querySelectorAll('input[name="interests"]:checked')
+    ].map(i => i.value);
 
-        try {
-            const response = await fetch(
-                "https://n8ngc.codeblazar.org/webhook/save-profile",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(profile)
-                }
-            );
+    const profile = {
+        name: document.getElementById("name").value.trim(),
+        age: document.getElementById("age").value,
+        school: document.getElementById("school").value.trim(),
+        bio: document.getElementById("bio").value.trim(),
+        interests: interests
+    };
 
-            const text = await response.text();
-            console.log("RAW RESPONSE:", text);
+    console.log("📤 Sending profile:", profile);
 
-            let data = {};
+    try {
+        const response = await fetch(
+            "https://n8ngc.codeblazar.org/webhook/save-profile",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            }
+        );
+
+        console.log("Response Status:", response.status);
+
+        const text = await response.text();
+        console.log("Raw Response:", text);
+
+        let data;
 
             try {
                 data = JSON.parse(text);
@@ -273,28 +300,21 @@ if (form) {
                 // fallback if backend returns plain text
                 data = { message: text };
             }
-                    if (response.ok) {
+            if (response.ok) {
                 // Needed by Find Friends on chat.html
-                saveStoredProfile(profile);
                 localStorage.setItem("currentUser", profile.name);
-                localStorage.setItem('loggedInUser', profile.name);
 
                 showPopup(data.message || "Profile saved successfully! 🎉");
-                window.location.href = "profile-display.html";
+                window.location.href = "chat.html";
             } else {
                 showPopup(data.message || "Failed to save profile. Please try again.");
             }
 
-        } catch (error) {
-            console.error(error);
-            showPopup("Network error. Please check your connection.");
-        }
-    });
-}
-
-function closePopup() {
-    const popup = document.getElementById("popup");
-    if (popup) popup.classList.add("hidden");
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        showPopup("Network error. Please check the console.");
+    }
+});
 }
 
 // ======================
@@ -343,7 +363,69 @@ async function findFriends() {
     }
 }
 
+let allMatches = [];
+
 function displayMatches(matches) {
+    allMatches = matches || [];
+    const toolbar = document.getElementById("matchesToolbar");
+
+    if (allMatches.length === 0) {
+        if (toolbar) toolbar.classList.add("hidden");
+        renderMatchCards([]);
+        return;
+    }
+
+    if (toolbar) toolbar.classList.remove("hidden");
+    buildInterestChips();
+    renderMatchCards(allMatches);
+}
+
+function buildInterestChips() {
+    const chipBox = document.getElementById("interestChips");
+    if (!chipBox) return;
+
+    const interests = new Set();
+    allMatches.forEach(m =>
+        String(m.interests || "").split(",").forEach(i => {
+            const t = i.trim();
+            if (t) interests.add(t);
+        })
+    );
+
+    chipBox.innerHTML =
+        `<button class="chip chip-active" data-tag="all" onclick="selectChip(this)">All</button>` +
+        [...interests].map(i =>
+            `<button class="chip" data-tag="${i}" onclick="selectChip(this)">${i}</button>`
+        ).join("");
+}
+
+function selectChip(btn) {
+    document.querySelectorAll("#interestChips .chip")
+        .forEach(c => c.classList.remove("chip-active"));
+    btn.classList.add("chip-active");
+    applyFilters();
+}
+
+function applyFilters() {
+    const q = (document.getElementById("friendSearch")?.value || "").trim().toLowerCase();
+    const activeChip = document.querySelector("#interestChips .chip-active");
+    const tag = activeChip ? activeChip.dataset.tag : "all";
+
+    let list = allMatches;
+
+    if (tag !== "all") {
+        list = list.filter(m =>
+            String(m.interests || "").toLowerCase().includes(tag.toLowerCase()));
+    }
+    if (q) {
+        list = list.filter(m =>
+            String(m.name || "").toLowerCase().includes(q));
+    }
+
+    renderMatchCards(list);
+}
+
+function renderMatchCards(matches) {
     const container = document.getElementById("matches");
     if (!container) return;
 
@@ -372,91 +454,99 @@ function displayMatches(matches) {
 }
 
 let chatWith = null;
+let pollTimer = null;
 
-async function sayHi(friendName) {
+function sayHi(friendName) {
     chatWith = friendName;
-
     document.getElementById("chatTitle").textContent = friendName;
-    document.getElementById("chatAvatar").textContent =
-        friendName.charAt(0).toUpperCase();
+    document.getElementById("chatAvatar").textContent = friendName.charAt(0).toUpperCase();
     document.getElementById("chatPanel").classList.remove("hidden");
+    document.getElementById("icebreakerHint")?.classList.add("hidden");
 
-    const box = document.getElementById("chatMessages");
+    sendHello(friendName);
 
-    // Clear old messages when opening a new chat
-    box.innerHTML = "";
+    clearInterval(pollTimer);
+    pollTimer = setInterval(loadMessages, 3000);
+}
 
+async function sendHello(friendName) {
+    await postMessage(friendName, "Hello 👋");
+    loadMessages();
+}
+
+async function postMessage(to, message) {
     try {
-        const response = await fetch(
-            "https://n8ngc.codeblazar.org/webhook/say-hi",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    sender: localStorage.getItem("currentUser"),
-                    receiver: friendName,
-                    message: "Hello 👋"
-                })
-            }
-        );
+        await fetch("https://n8ngc.codeblazar.org/webhook/say-hi", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                sender: localStorage.getItem("currentUser"),
+                receiver: to,
+                message: message
+            })
+        });
+    } catch (e) { console.error(e); }
+}
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
+function renderMessages(msgs, me) {
+    const box = document.getElementById("chatMessages");
+    box.innerHTML = (msgs || []).map(m => `
+        <div class="msg ${m.Sender === me ? "msg-me" : "msg-them"}">
+            ${m.Message}
+        </div>
+    `).join("");
+    box.scrollTop = box.scrollHeight;
+}
 
-        // Show the hello message immediately
-        box.innerHTML += `
-            <div class="msg msg-me">
-                Hello 👋
-            </div>
-        `;
-        box.scrollTop = box.scrollHeight;
-
-        console.log("Hi sent!");
-    } catch (err) {
-        console.error("Failed to send hi:", err);
-        alert("Failed to send hi.");
-    }
+async function sendMessage() {
+    const input = document.getElementById("msgInput");
+    const text = input.value.trim();
+    if (!text || !chatWith) return;
+    input.value = "";
+    await postMessage(chatWith, text);
+    loadMessages();
 }
 
 function closeChat() {
+    clearInterval(pollTimer);
     chatWith = null;
     document.getElementById("chatPanel").classList.add("hidden");
 }
 
+async function loadMessages() {
+    if (!chatWith) return;
+    const me = localStorage.getItem("currentUser");
+    try {
+        const res = await fetch("https://n8ngc.codeblazar.org/webhook/get-messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userA: me, userB: chatWith })
+        });
+        const msgs = await res.json();
+        renderMessages(msgs, me);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 async function getIcebreaker() {
     if (!chatWith) return;
-
     const hint = document.getElementById("icebreakerHint");
     hint.classList.remove("hidden");
     hint.textContent = "Lumi is thinking…";
-
     try {
-        const res = await fetch(
-            "https://n8ngc.codeblazar.org/webhook/icebreaker",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    from: localStorage.getItem("currentUser"),
-                    to: chatWith
-                })
-            }
-        );
-
+        const res = await fetch("https://n8ngc.codeblazar.org/webhook/icebreaker", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                from: localStorage.getItem("currentUser"),
+                to: chatWith
+            })
+        });
         const data = await res.json();
-
-        hint.textContent =
-            "💡 " +
-            (data.suggestion ||
-                "Just say hi — being first is already brave!");
+        hint.textContent = "💡 " + (data.suggestion || "Just say hi — being first is already brave!");
     } catch (e) {
-        hint.textContent =
-            "💡 Just say hi — being first is already brave!";
+        hint.textContent = "💡 Just say hi — being first is already brave!";
     }
 }
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C240 - Find Friends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styling.css" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="home.html" class="brand">Beyond Four Walls</a>
+      <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="chat.html">Chat</a>
+        <a href="find-friends.html" class="active">Find Friends</a>
+        <div class="profile-dropdown" id="profileDropdown">
+          <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
+            aria-expanded="false">
+            <span class="user-icon"></span>
+          </button>
+
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="profile.html" id="updateProfileOpt"><span class="icon">👤</span> Update Profile</a>
+            <a href="#" id="logoutOpt" class="logout-link"><span class="icon">🚪</span> Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="friends-section">
+      <div class="friends-card">
+        <div class="friends-header">
+          <div>
+            <h2>Suggested Friends</h2>
+            <p class="friends-sub">Based on your interests</p>
+          </div>
+          <button class="find-btn" onclick="findFriends()">Find Friends</button>
+        </div>
+
+        <div id="matchesToolbar" class="matches-toolbar hidden">
+          <input id="friendSearch" type="text" class="friend-search"
+                 placeholder="Search by name..." autocomplete="off"
+                 oninput="applyFilters()" />
+          <div id="interestChips" class="interest-chips"></div>
+        </div>
+
+        <div id="matches" class="matches-grid">
+          <div class="matches-empty">
+            <span class="matches-empty-icon">✿</span>
+            <p>Click <strong>Find Friends</strong> to see who you'd click with.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <!-- Floating friend-to-friend chat window -->
+  <div id="chatPanel" class="chat-float hidden" role="dialog" aria-label="Chat with friend">
+    <div class="chat-box-header">
+      <div class="chat-peer">
+        <span id="chatAvatar" class="friend-avatar chat-avatar-sm"></span>
+        <div>
+          <h3 id="chatTitle"></h3>
+          <p class="chat-status">Matched friend</p>
+        </div>
+      </div>
+      <button class="chat-close" onclick="closeChat()" aria-label="Close chat">✕</button>
+    </div>
+    <div id="chatMessages" class="chat-messages"></div>
+    <div id="sharedInterests" class="shared-interests hidden"></div>
+    <div id="icebreakerHint" class="icebreaker-hint hidden"></div>
+    <div class="chat-input-row">
+      <button class="icebreaker-btn" onclick="getIcebreaker()" title="Ask Lumi for an icebreaker">✨</button>
+      <input id="msgInput" type="text" placeholder="Type a message..." autocomplete="off"
+        onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button class="say-hi-btn chat-send" onclick="sendMessage()" aria-label="Send">➤</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
