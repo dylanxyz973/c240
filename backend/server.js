@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { exec } = require('child_process');
 const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
 const { parse } = require('querystring');
@@ -653,8 +654,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && pathname === '/') {
-    res.writeHead(302, { Location: '/login' });
-    res.end();
+    sendFile(res, path.join(frontendDir, 'login.html'));
     return;
   }
 
@@ -1023,11 +1023,24 @@ async function startServer() {
       .filter((entry) => entry && entry.family === 'IPv4' && !entry.internal)
       .map((entry) => entry.address);
 
-    console.log(`Authentication server running at http://localhost:${port}`);
+    const loginUrl = `http://localhost:${port}/`;
+    console.log(`Authentication server running at ${loginUrl}`);
 
     if (lanAddresses.length > 0) {
       console.log(`LAN access: http://${lanAddresses[0]}:${port}`);
     }
+
+    const openBrowser = process.platform === 'win32'
+      ? `start "" "${loginUrl}"`
+      : process.platform === 'darwin'
+        ? `open "${loginUrl}"`
+        : `xdg-open "${loginUrl}"`;
+
+    exec(openBrowser, (error) => {
+      if (error) {
+        console.warn('[SERVER] could not open browser automatically:', error.message);
+      }
+    });
   });
 }
 
