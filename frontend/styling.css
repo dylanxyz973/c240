@@ -461,14 +461,7 @@ input {
  
 .btn-primary { background: var(--ink); color: #fff; }
 .btn-primary:hover { background: var(--accent); }
- 
-.btn-secondary {
-  background: transparent;
-  color: var(--ink);
-  border: 1.5px solid var(--border);
-}
-.btn-secondary:hover { background: var(--accent-soft); border-color: var(--accent-soft); }
- 
+
 .features {
   max-width: 1080px;
   margin: 1rem auto 3rem;

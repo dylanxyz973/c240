@@ -71,124 +71,72 @@ window.addEventListener('load', function () {
 // Profile form
 const form = document.getElementById("profileForm");
 
-// popup function
+// Popup function
 function showPopup(message) {
-    const popup = document.getElementById("popup");
-    const popupMessage = document.getElementById("popupMessage");
-    const popupOkBtn = document.getElementById("popupOkBtn");
-    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
-    const popupCancelBtn = document.getElementById("popupCancelBtn");
-
-    if (!popup || !popupMessage) return;
-
-    popupMessage.textContent = message;
-
-    if (popupOkBtn) {
-        popupOkBtn.textContent = "OK";
-        popupOkBtn.classList.remove("hidden");
-    }
-    if (popupConfirmBtn) {
-        popupConfirmBtn.textContent = "Yes";
-        popupConfirmBtn.classList.add("hidden");
-    }
-    if (popupCancelBtn) {
-        popupCancelBtn.textContent = "No";
-        popupCancelBtn.classList.add("hidden");
-    }
-
-    popup.classList.remove("hidden");
+    alert(message);
 }
 
-function showConfirmPopup(message, onConfirm) {
-    const popup = document.getElementById("popup");
-    const popupMessage = document.getElementById("popupMessage");
-    const popupOkBtn = document.getElementById("popupOkBtn");
-    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
-    const popupCancelBtn = document.getElementById("popupCancelBtn");
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    if (!popup || !popupMessage) return;
+    console.log("✅ Save Profile button clicked");
 
-    popupMessage.textContent = message;
+    const interests = [
+        ...document.querySelectorAll('input[name="interests"]:checked')
+    ].map(i => i.value);
 
-    if (popupOkBtn) {
-        popupOkBtn.textContent = "OK";
-        popupOkBtn.classList.add("hidden");
-    }
-    if (popupConfirmBtn) {
-        popupConfirmBtn.textContent = "Yes";
-        popupConfirmBtn.classList.remove("hidden");
-        popupConfirmBtn.onclick = () => {
-            popup.classList.add("hidden");
-            onConfirm();
-        };
-    }
-    if (popupCancelBtn) {
-        popupCancelBtn.classList.remove("hidden");
-        popupCancelBtn.onclick = () => popup.classList.add("hidden");
-    }
+    const profile = {
+        name: document.getElementById("name").value.trim(),
+        age: document.getElementById("age").value,
+        school: document.getElementById("school").value.trim(),
+        bio: document.getElementById("bio").value.trim(),
+        interests: interests
+    };
 
-    popup.classList.remove("hidden");
-}
+    console.log("📤 Sending profile:", profile);
 
-if (form) {
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    try {
+        const response = await fetch(
+            "https://n8ngc.codeblazar.org/webhook/save-profile",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(profile)
+            }
+        );
 
-        const interests = [...document.querySelectorAll('input[name="interests"]:checked')]
-            .map(i => i.value);
+        console.log("Response Status:", response.status);
 
-        const profile = {
-            name: document.getElementById("name").value,
-            age: document.getElementById("age").value,
-            school: document.getElementById("school").value,
-            bio: document.getElementById("bio").value,
-            interests: interests
-        };
+        const text = await response.text();
+        console.log("Raw Response:", text);
+
+        let data;
 
         try {
-            const response = await fetch(
-                "https://n8ngc.codeblazar.org/webhook/save-profile",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(profile)
-                }
-            );
-
-            const text = await response.text();
-            console.log("RAW RESPONSE:", text);
-
-            let data = {};
-
-            try {
-                data = JSON.parse(text);
-            } catch (err) {
-                // fallback if backend returns plain text
-                data = { message: text };
-            }
-            if (response.ok) {
-                // Needed by Find Friends on chat.html
-                localStorage.setItem("currentUser", profile.name);
-
-                showPopup(data.message || "Profile saved successfully! 🎉");
-                window.location.href = "chat.html";
-            } else {
-                showPopup(data.message || "Failed to save profile. Please try again.");
-            }
-
-        } catch (error) {
-            console.error(error);
-            showPopup("Network error. Please check your connection.");
+            data = JSON.parse(text);
+        } catch {
+            data = {
+                success: response.ok,
+                message: text || "No response received."
+            };
         }
-    });
-}
 
-function closePopup() {
-    const popup = document.getElementById("popup");
-    if (popup) popup.classList.add("hidden");
-}
+        if (response.ok) {
+            showPopup(data.message || "Profile saved successfully!");
+
+            // Redirect after clicking OK
+            window.location.href = "chat.html";
+        } else {
+            showPopup(data.message || "Failed to save profile.");
+        }
+
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        showPopup("Network error. Please check the console.");
+    }
+});
 
 // ======================
 // FIND FRIENDS
