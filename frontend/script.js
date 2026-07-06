@@ -34,7 +34,19 @@ window.addEventListener('load', function () {
             if (window.botpress.fabIframe) window.botpress.fabIframe.remove();
             if (window.botpress.webchatIframe) window.botpress.webchatIframe.remove();
             window.botpress.initialized = false;
-            window.botpress.init({
+
+            // Prefer an element with id 'chatbot' (user-provided). Fall back to 'chat-mount' if present.
+            var containerSelector = null;
+            if (document.getElementById('chatbot')) containerSelector = '#chatbot';
+            else if (document.getElementById('chat-mount')) containerSelector = '#chat-mount';
+            else containerSelector = 'body'; // last resort - attach to body
+
+            // Determine the container element and read an optional data-config-url attribute from it.
+            var containerEl = document.querySelector(containerSelector);
+            // Optional remote config JSON (shareable config). Prefer the data-config-url attribute on the container.
+            var remoteConfigUrl = (containerEl && containerEl.dataset && containerEl.dataset.configUrl) || 'https://files.bpcontent.cloud/2026/05/12/04/20260512040002-DAORQ82T.json';
+
+            var initOptions = {
                 ...window.botpress,
                 configuration: {
                     ...window.botpress.configuration,
@@ -44,10 +56,72 @@ window.addEventListener('load', function () {
                     radius: 2,
                     fontFamily: 'Inter',
                 },
-                selector: '#chat-mount',
-            });
+                selector: containerSelector,
+            };
+
+            // If a remote config JSON is provided, pass it through so Botpress uses that configuration
+            if (remoteConfigUrl) {
+                initOptions.configUrl = remoteConfigUrl;
+            }
+
+            window.botpress.init(initOptions);
             window.botpress.on('webchat:ready', function () {
-                window.botpress.open();
+                // Inline chat is mounted into the selected container.
+                // Do not call botpress.open() so the chat stays embedded instead of popping up.
+
+                // Remove any floating FAB/popup that the Botpress script may have added.
+                function removeFloating() {
+                    try {
+                        // Known references
+                        if (window.botpress && window.botpress.fabIframe) {
+                            window.botpress.fabIframe.remove();
+                        }
+                        if (window.botpress && window.botpress.webchatIframe && window.botpress.webchatIframe !== window.botpress._iframe) {
+                            // remove any leftover iframe that is not our inline mount
+                            window.botpress.webchatIframe.remove();
+                        }
+
+                        // Generic selectors to catch common floating elements
+                        var selectors = [
+                            '.bp-fab', '.botpress-fab', '.bp-widget', '.botpress-widget', '.webchat-fab', '[data-botpress-fab]'
+                        ];
+                        selectors.forEach(function (s) {
+                            document.querySelectorAll(s).forEach(function (el) { el.remove(); });
+                        });
+
+                        // Remove iframes that look like botpress popups
+                        document.querySelectorAll('iframe').forEach(function (ifrm) {
+                            try {
+                                var src = ifrm.getAttribute('src') || '';
+                                if (/botpress|bpcontent|bp-webchat/.test(src)) ifrm.remove();
+                            } catch (e) { }
+                        });
+                    } catch (e) {
+                        console.warn('Error removing floating botpress elements', e);
+                    }
+                }
+
+                removeFloating();
+
+                // Watch briefly for DOM nodes that match floating selectors and remove them if they appear
+                var observer = new MutationObserver(function (mutations, obs) {
+                    var found = false;
+                    mutations.forEach(function (m) {
+                        m.addedNodes.forEach(function (n) {
+                            if (!(n instanceof HTMLElement)) return;
+                            var outer = n.outerHTML || '';
+                            if (/botpress|bp-fab|bp-widget|botpress-fab|webchat-fab/i.test(outer)) {
+                                found = true;
+                                try { n.remove(); } catch (e) { }
+                            }
+                        });
+                    });
+                    if (found) removeFloating();
+                });
+
+                // Observe for a short window (5s) to catch late insertions
+                observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+                setTimeout(function () { observer.disconnect(); }, 5000);
             });
         } catch (err) {
             console.error('Could not mount Botpress inline:', err);
@@ -127,7 +201,7 @@ form.addEventListener("submit", async (e) => {
             showPopup(data.message || "Profile saved successfully!");
 
             // Redirect after clicking OK
-            window.location.href = "chat.html";
+            window.location.href = "find-friends.html";
         } else {
             showPopup(data.message || "Failed to save profile.");
         }
