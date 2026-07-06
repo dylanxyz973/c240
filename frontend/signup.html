@@ -11,27 +11,80 @@
 </head>
 <body>
  <header>
-    <nav>
-      <a href="home.html" class="brand">Beyond Four Walls</a>
-      <div class="nav-links">
-        <a href="home.html">Home</a>
-        <a href="about.html">About Us</a>
-        <a href="chat.html" class="active">Chat</a>
-        <a href="login.html">Login</a>
-        <a href="signup.html" class="btn-nav">Sign Up</a>
-      </div>
-    </nav>
   </header>
 
   <main class="content-card">
     <h1>Create Account</h1>
-    <form action="/signup" method="POST">
-      <input type="text" name="fullName" placeholder="Full Name" required />
+    <form id="signupForm" action="/signup" method="POST" novalidate>
+      <input type="text" name="username" placeholder="Username" required />
       <input type="email" name="email" placeholder="Email" required />
       <input type="password" name="password" placeholder="Password" required />
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
       <button type="submit">Sign Up</button>
     </form>
-    <p><a href="/login">Already have an account?</a></p>
+    <p id="signupError" role="alert" style="color:#b03030;min-height:1.25rem;"></p>
+    <p><a href="login.html">Already have an account?</a></p>
   </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('signupForm');
+      const errorEl = document.getElementById('signupError');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const username = String(formData.get('username') || '').trim();
+        const email = String(formData.get('email') || '').trim().toLowerCase();
+        const password = String(formData.get('password') || '');
+        const confirmPassword = String(formData.get('confirmPassword') || '');
+
+        if (errorEl) errorEl.textContent = '';
+
+        try {
+          const endpoint = typeof window.getApiUrl === 'function'
+            ? window.getApiUrl('/signup')
+            : 'http://localhost:3000/signup';
+
+          const body = new URLSearchParams({ username, email, password, confirmPassword }).toString();
+
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body
+          });
+
+          const result = await response.json().catch(function () {
+            return { success: false, message: 'Unexpected server response.' };
+          });
+
+          if (!response.ok || !result.success) {
+            if (errorEl) {
+              errorEl.textContent = result.message || 'Signup failed. Please try again.';
+            }
+            return;
+          }
+
+          localStorage.setItem('currentUser', username);
+          localStorage.setItem('loggedInUser', username);
+          localStorage.setItem('loggedInUserEmail', email);
+          localStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('loggedInUserEmail', email);
+
+          window.location.href = 'home.html';
+        } catch (error) {
+          if (errorEl) {
+            errorEl.textContent = 'Network error. Please make sure the backend is running.';
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

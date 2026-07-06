@@ -1,0 +1,13 @@
+{
+  "name": "c240",
+  "version": "1.0.0",
+  "description": "Authentication backend for C240 project",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "mysql2": "^3.4.2"
+  }
+}

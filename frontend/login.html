@@ -11,28 +11,81 @@
 </head>
 <body>
   <header>
-    <nav>
-      <a href="home.html" class="brand">Beyond Four Walls</a>
-      <div class="nav-links">
-        <a href="home.html">Home</a>
-        <a href="about.html">About Us</a>
-        <a href="chat.html" class="active">Chat</a>
-        <a href="login.html">Login</a>
-        <a href="signup.html" class="btn-nav">Sign Up</a>
-      </div>
-    </nav>
   </header>
 
   <main class="content-card">
     <h1>Login</h1>
-    <form action="/login" method="POST">
+    <form id="loginForm" action="/login" method="POST" novalidate>
       <input type="email" name="email" placeholder="Email" required />
       <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Log In</button>
     </form>
+    <p id="loginError" role="alert" style="color:#b03030;min-height:1.25rem;"></p>
     <p><a href="forgot-password.html">Forgot password?</a></p>
     <p><a href="signup.html">Create an account</a></p>
   </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    (function () {
+      const form = document.getElementById('loginForm');
+      const errorEl = document.getElementById('loginError');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        if (errorEl) errorEl.textContent = '';
+
+        try {
+          const endpoint = typeof window.getApiUrl === 'function'
+            ? window.getApiUrl('/login')
+            : 'http://localhost:3000/login';
+
+          const body = new URLSearchParams({ email, password }).toString();
+
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body
+          });
+
+          const result = await response.json().catch(function () {
+            return { success: false, message: 'Unexpected server response.' };
+          });
+
+          if (!response.ok || !result.success) {
+            if (errorEl) {
+              errorEl.textContent = result.message || 'Login failed. Please try again.';
+            }
+            return;
+          }
+
+          const normalizedEmail = email.toLowerCase();
+          const username = String(result.username || normalizedEmail.split('@')[0] || '').trim();
+
+          localStorage.setItem('currentUser', username);
+          localStorage.setItem('loggedInUser', username);
+          localStorage.setItem('loggedInUserEmail', normalizedEmail);
+          localStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('loggedInUserEmail', normalizedEmail);
+
+          window.location.href = 'home.html';
+        } catch (error) {
+          if (errorEl) {
+            errorEl.textContent = 'Network error. Please make sure the backend is running.';
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
 
