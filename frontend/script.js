@@ -236,7 +236,69 @@ async function findFriends() {
     }
 }
 
+let allMatches = [];
+
 function displayMatches(matches) {
+    allMatches = matches || [];
+    const toolbar = document.getElementById("matchesToolbar");
+
+    if (allMatches.length === 0) {
+        if (toolbar) toolbar.classList.add("hidden");
+        renderMatchCards([]);
+        return;
+    }
+
+    if (toolbar) toolbar.classList.remove("hidden");
+    buildInterestChips();
+    renderMatchCards(allMatches);
+}
+
+function buildInterestChips() {
+    const chipBox = document.getElementById("interestChips");
+    if (!chipBox) return;
+
+    const interests = new Set();
+    allMatches.forEach(m =>
+        String(m.interests || "").split(",").forEach(i => {
+            const t = i.trim();
+            if (t) interests.add(t);
+        })
+    );
+
+    chipBox.innerHTML =
+        `<button class="chip chip-active" data-tag="all" onclick="selectChip(this)">All</button>` +
+        [...interests].map(i =>
+            `<button class="chip" data-tag="${i}" onclick="selectChip(this)">${i}</button>`
+        ).join("");
+}
+
+function selectChip(btn) {
+    document.querySelectorAll("#interestChips .chip")
+        .forEach(c => c.classList.remove("chip-active"));
+    btn.classList.add("chip-active");
+    applyFilters();
+}
+
+function applyFilters() {
+    const q = (document.getElementById("friendSearch")?.value || "").trim().toLowerCase();
+    const activeChip = document.querySelector("#interestChips .chip-active");
+    const tag = activeChip ? activeChip.dataset.tag : "all";
+
+    let list = allMatches;
+
+    if (tag !== "all") {
+        list = list.filter(m =>
+            String(m.interests || "").toLowerCase().includes(tag.toLowerCase()));
+    }
+    if (q) {
+        list = list.filter(m =>
+            String(m.name || "").toLowerCase().includes(q));
+    }
+
+    renderMatchCards(list);
+}
+
+function renderMatchCards(matches) {
     const container = document.getElementById("matches");
     if (!container) return;
 

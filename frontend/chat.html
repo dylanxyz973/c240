@@ -19,7 +19,7 @@
       <a href="home.html" class="brand">Beyond Four Walls</a>
       <div class="nav-links">
         <a href="home.html">Home</a>
-        <a href="about.html" >About Us</a>
+        <a href="about.html">About Us</a>
         <a href="chat.html" class="active">Chat</a>
         <div class="profile-dropdown" id="profileDropdown">
           <button class="avatar-btn" id="avatarBtn" aria-label="Toggle user menu" aria-haspopup="true"
@@ -39,12 +39,17 @@
   <main class="chat-page">
     <div class="chat-glow" aria-hidden="true"></div>
 
+    <!-- Hero: now covers both Lumi and friend-finding -->
     <section class="chat-hero">
-      <p class="eyebrow">A quiet space to talk</p>
+      <p class="eyebrow">Your space to connect</p>
       <h1>Hi, I'm Lumi.</h1>
-      <p class="subtext">Whatever's on your mind, we can take it at your pace.</p>
+      <p class="subtext">
+        Talk to me anytime, or let me introduce you to people who get you —
+        at your pace, no pressure.
+      </p>
     </section>
 
+    <!-- Suggested Friends -->
     <section class="friends-section">
       <div class="friends-card">
         <div class="friends-header">
@@ -54,7 +59,22 @@
           </div>
           <button class="find-btn" onclick="findFriends()">Find Friends</button>
         </div>
-        <div id="matches" class="matches-grid"></div>
+
+        <!-- Search + interest filters (revealed by JS once matches exist) -->
+        <div id="matchesToolbar" class="matches-toolbar hidden">
+          <input id="friendSearch" type="text" class="friend-search"
+                 placeholder="Search by name..." autocomplete="off"
+                 oninput="applyFilters()" />
+          <div id="interestChips" class="interest-chips"></div>
+        </div>
+
+        <!-- Empty state shows before the first search -->
+        <div id="matches" class="matches-grid">
+          <div class="matches-empty">
+            <span class="matches-empty-icon">✿</span>
+            <p>Click <strong>Find Friends</strong> to see who you'd click with.</p>
+          </div>
+        </div>
       </div>
     </section>
 
