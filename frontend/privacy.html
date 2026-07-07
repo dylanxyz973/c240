@@ -74,6 +74,17 @@
     </footer>
   </div>
 
+  <div id="popup" class="popup hidden">
+    <div class="popup-content">
+      <p id="popupMessage"></p>
+      <div class="popup-actions">
+        <button id="popupCancelBtn" type="button" class="btn btn-secondary hidden">No</button>
+        <button id="popupConfirmBtn" type="button" class="btn btn-save hidden">Yes</button>
+        <button id="popupOkBtn" type="button" class="btn btn-save" onclick="closePopup()">OK</button>
+      </div>
+    </div>
+  </div> 
+  
   <script src="script.js"></script>
 </body>
 
