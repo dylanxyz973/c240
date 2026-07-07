@@ -1028,6 +1028,7 @@ footer {
   .interests-grid {
     grid-template-columns: 1fr;
   }
+}
 
 .friends-section {
   position: relative;
@@ -2016,5 +2017,3 @@ footer {
 }
 
 .matches-empty p { margin: 0; font-size: 0.95rem; }
-
-}
