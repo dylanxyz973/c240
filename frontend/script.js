@@ -303,6 +303,7 @@ if (form) {
             if (response.ok) {
                 // Needed by Find Friends on chat.html
                 localStorage.setItem("currentUser", profile.name);
+                saveStoredProfile(profile);
 
                 showPopup(data.message || "Profile saved successfully! 🎉");
                 window.location.href = "chat.html";
