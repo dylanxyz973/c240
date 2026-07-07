@@ -374,7 +374,7 @@ if (form) {
                 saveStoredProfile(profile);
 
                 showPopup(data.message || "Profile saved successfully! 🎉");
-                window.location.href = "chat.html";
+                window.location.href = "profile-display.html";
             } else {
                 showPopup(data.message || "Failed to save profile. Please try again.");
             }
