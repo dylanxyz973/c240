@@ -48,7 +48,7 @@
         try {
           const endpoint = typeof window.getApiUrl === 'function'
             ? window.getApiUrl('/signup')
-            : 'http://localhost:3000/signup';
+            : '/signup';
 
           const body = new URLSearchParams({ username, email, password, confirmPassword }).toString();
 
