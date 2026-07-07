@@ -155,59 +155,82 @@ nav:hover {
   border-radius: 12px 12px 0 0;
 }
 
-/* --- Dark Dropdown Panel Fixes --- */
+/* --- The Frosted & Aesthetic Dropdown Panel --- */
 .dropdown-menu {
   display: none;
   position: absolute;
   right: 0;
   top: 100%;
-  margin-top: 12px; /* Extra breathing space */
-  background-color: #242926; /* Deep organic forest-charcoal instead of stark pure black */
-  border: 1px solid #323a35;
-  border-radius: 16px; /* Match the rounded pillow aesthetic */
-  width: 190px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  margin-top: 14px; /* Slightly more breathing space below the capsule */
+  
+  /* Matches the navbar's beautiful frosted glass effect */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  border: 1px solid rgba(107, 140, 112, 0.15); /* Soft sage boundary */
+  border-radius: 16px; 
+  width: 200px; /* Slightly wider for better text flow */
+  box-shadow: 0 12px 32px rgba(107, 140, 112, 0.12); /* Pillowy shadow */
   z-index: 9999;
   overflow: hidden;
-  padding: 6px; /* Acts as an inner frame */
+  padding: 8px; /* Inner frame padding */
 }
 
 .dropdown-menu.show {
   display: block;
-  animation: floatIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  animation: floatIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
+/* Individual Links */
 .dropdown-menu a {
   display: flex !important;
   align-items: center;
   width: 100%;
   height: auto !important;
   padding: 10px 14px;
-  color: #e2ede4 !important; /* Gentle sage-tinted off-white text */
+  color: #4a534f !important; /* Calmer, muted charcoal-sage text */
   text-decoration: none;
   font-size: 0.9rem;
   font-family: 'Inter', sans-serif;
-  border-radius: 10px; /* Rounded interior links */
-  border-bottom: none; /* Removed the ugly legal-document underline separators */
-  transition: background-color 0.2s ease;
-  margin-bottom: 2px;
+  font-weight: 500;
+  border-radius: 10px; /* Soft inner pills for the hover state */
+  border-bottom: none; 
+  transition: all 0.2s ease;
+  margin-bottom: 4px; /* Space between links */
 }
 
 .dropdown-menu a:last-child {
   margin-bottom: 0;
 }
 
+/* Hover States */
 .dropdown-menu a:hover {
-  background-color: #323a35 !important;
-  color: #ffffff !important;
+  background-color: #e2ede4 !important; /* Gentle sage highlight */
+  color: #1c2220 !important; /* Darker text on hover for contrast */
+  transform: translateX(4px); /* Tiny interactive nudge to the right */
 }
 
+/* Special Styling for Logout */
 .dropdown-menu a.logout-link {
-  color: #ff8b8b !important; /* A softer coral-red instead of alarming crimson */
+  color: #e57373 !important; /* Soft coral-red */
 }
 
+.dropdown-menu a.logout-link:hover {
+  background-color: #fff0f0 !important; /* Very soft red hover background */
+  color: #d32f2f !important;
+}
+
+/* Emoji/Icon Alignment */
 .dropdown-menu a .icon {
-  margin-right: 10px;
+  margin-right: 12px;
+  font-size: 1.15rem; /* Scales the emojis to fit the text better */
+  transition: transform 0.2s ease;
+}
+
+/* Make the icons playfully bounce on hover */
+.dropdown-menu a:hover .icon {
+  transform: scale(1.15);
 }
 
 /* Gentle reveal animation for the cloud dropdown */
