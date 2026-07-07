@@ -17,6 +17,19 @@ function saveStoredProfile(profile) {
     localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
 }
 
+function clearStoredAuth() {
+    const authKeys = [
+        "currentUser",
+        "loggedInUser",
+        "loggedInUserEmail",
+        "loggedInUserPassword",
+        "isLoggedIn"
+    ];
+
+    authKeys.forEach((key) => localStorage.removeItem(key));
+    authKeys.forEach((key) => sessionStorage.removeItem(key));
+}
+
 function loadStoredAuth() {
     return {
         name: localStorage.getItem('loggedInUser') || ''
@@ -116,7 +129,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (logoutOpt) {
         logoutOpt.addEventListener("click", (event) => {
             event.preventDefault();
-            showConfirmPopup("We'll miss you! Ready to log out?", () => {
+            showConfirmPopup("You will be logout. Click here to comfirm.", () => {
+                clearStoredAuth();
                 window.location.href = "login.html";
             });
         });
@@ -250,9 +264,63 @@ window.addEventListener('load', function () {
     }, 250);
 });
 
-// Popup function
+function closePopup() {
+    const popup = document.getElementById("popup");
+    if (!popup) return;
+    popup.classList.add("hidden");
+}
+
 function showPopup(message) {
-    alert(message);
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+    const popupCancelBtn = document.getElementById("popupCancelBtn");
+    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
+    const popupOkBtn = document.getElementById("popupOkBtn");
+
+    if (!popup || !popupMessage || !popupOkBtn) {
+        alert(message);
+        return;
+    }
+
+    popupMessage.textContent = message;
+    popup.classList.remove("hidden");
+
+    if (popupCancelBtn) popupCancelBtn.classList.add("hidden");
+    if (popupConfirmBtn) popupConfirmBtn.classList.add("hidden");
+    popupOkBtn.classList.remove("hidden");
+
+    popupOkBtn.onclick = closePopup;
+}
+
+function showConfirmPopup(message, onConfirm) {
+    const popup = document.getElementById("popup");
+    const popupMessage = document.getElementById("popupMessage");
+    const popupCancelBtn = document.getElementById("popupCancelBtn");
+    const popupConfirmBtn = document.getElementById("popupConfirmBtn");
+    const popupOkBtn = document.getElementById("popupOkBtn");
+
+    if (!popup || !popupMessage || !popupCancelBtn || !popupConfirmBtn) {
+        const confirmed = window.confirm(message);
+        if (confirmed && typeof onConfirm === "function") {
+            onConfirm();
+        }
+        return;
+    }
+
+    popupMessage.textContent = message;
+    popup.classList.remove("hidden");
+
+    popupCancelBtn.classList.remove("hidden");
+    popupConfirmBtn.classList.remove("hidden");
+    if (popupOkBtn) popupOkBtn.classList.add("hidden");
+
+    popupCancelBtn.onclick = closePopup;
+    popupConfirmBtn.onclick = () => {
+        closePopup();
+        if (typeof onConfirm === "function") {
+            onConfirm();
+        }
+    };
 }
 
 if (form) {
@@ -303,9 +371,10 @@ if (form) {
             if (response.ok) {
                 // Needed by Find Friends on chat.html
                 localStorage.setItem("currentUser", profile.name);
+                saveStoredProfile(profile);
 
                 showPopup(data.message || "Profile saved successfully! 🎉");
-                window.location.href = "chat.html";
+                window.location.href = "profile-display.html";
             } else {
                 showPopup(data.message || "Failed to save profile. Please try again.");
             }
