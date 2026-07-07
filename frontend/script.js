@@ -30,6 +30,17 @@ function clearStoredAuth() {
     authKeys.forEach((key) => sessionStorage.removeItem(key));
 }
 
+function clearStoredProfile() {
+    localStorage.removeItem(PROFILE_STORAGE_KEY);
+}
+
+function resolveApiUrl(endpoint) {
+    if (typeof window.getApiUrl === "function") {
+        return window.getApiUrl(endpoint);
+    }
+    return endpoint;
+}
+
 function loadStoredAuth() {
     return {
         name: localStorage.getItem('loggedInUser') || ''
@@ -113,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dropdownMenu = document.getElementById("dropdownMenu");
     const logoutOpt = document.getElementById("logoutOpt");
     const editProfileBtn = document.getElementById("editProfileBtn");
+    const deleteAccountBtn = document.getElementById("deleteAccountBtn");
     const storedProfile = getCurrentProfileData();
 
     if (avatarBtn && dropdownMenu) {
@@ -145,6 +157,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (form) {
         populateProfileForm(storedProfile);
+    }
+
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener("click", () => {
+            showConfirmPopup("This will permanently delete your account. Continue?", async () => {
+                const email = String(localStorage.getItem("loggedInUserEmail") || sessionStorage.getItem("loggedInUserEmail") || "").trim();
+                const username = String(localStorage.getItem("loggedInUser") || localStorage.getItem("currentUser") || "").trim();
+
+                if (!email && !username) {
+                    showPopup("No logged-in account was found to delete.");
+                    return;
+                }
+
+                deleteAccountBtn.disabled = true;
+                const originalText = deleteAccountBtn.textContent;
+                deleteAccountBtn.textContent = "Deleting...";
+
+                try {
+                    const endpoint = resolveApiUrl("/account/delete");
+                    const body = new URLSearchParams({ email, username }).toString();
+                    const response = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body
+                    });
+
+                    const result = await response.json().catch(() => ({
+                        success: false,
+                        message: "Unexpected server response."
+                    }));
+
+                    if (!response.ok || !result.success) {
+                        showPopup(result.message || "Unable to delete account right now.");
+                        return;
+                    }
+
+                    clearStoredProfile();
+                    clearStoredAuth();
+                    window.location.href = "signup.html";
+                } catch (error) {
+                    showPopup("Network error. Please make sure the backend is running.");
+                } finally {
+                    deleteAccountBtn.disabled = false;
+                    deleteAccountBtn.textContent = originalText;
+                }
+            });
+        });
     }
 
 });

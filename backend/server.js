@@ -715,7 +715,7 @@ const server = http.createServer(async (req, res) => {
       try {
         const user = await findUserByEmail(email);
         if (!user) {
-          sendJson(res, { success: false, message: 'Email or password is incorrect.' }, 401);
+          sendJson(res, { success: false, message: 'This account and gmail does not exist, please try again.' }, 401);
           return;
         }
 

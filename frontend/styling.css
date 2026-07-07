@@ -871,6 +871,8 @@ footer {
 .form-actions {
   display: flex;
   justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .btn-save {
@@ -889,6 +891,24 @@ footer {
 .btn-save:hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(107, 140, 112, 0.3);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #d96b63, #b84840);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 20px rgba(184, 72, 64, 0.24);
+}
+
+.btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(184, 72, 64, 0.3);
 }
 
 /* POP UP MESSAGE */
