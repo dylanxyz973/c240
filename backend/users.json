@@ -21,21 +21,12 @@
     "created_at": "2026-07-06T01:10:47.547Z"
   },
   {
-    "id": 8,
-    "username": "testing1",
-    "name": "testing1",
-    "interests": [],
-    "email": "testing1@gmail.com",
-    "password": "$2b$10$Womyq8WQtQPAYqCbJQhM0OaxOH8PiZSLmmc59MzezcnAy3dsIUdES",
-    "created_at": "2026-07-06T02:42:00.144Z"
-  },
-  {
     "id": 9,
     "username": "testing2",
     "name": "testing2",
     "interests": [],
     "email": "testing2@gmail.com",
-    "password": "$2b$10$a5Y2DtYBX/7RqKmOZf/SqebhZ873uK16gZnJJEZDu7jxp.CsjLkHG",
+    "password": "$2a$10$sCPOUcVbyN0G2hL5TSVzo.Ahs/78cE2UnjrLjQJ96soBCDoI6jjpe",
     "created_at": "2026-07-06T02:42:26.145Z"
   },
   {

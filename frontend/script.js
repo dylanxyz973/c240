@@ -117,6 +117,7 @@ function populateProfileDisplay(profile) {
 }
 
 const form = document.getElementById("profileForm");
+const changePasswordForm = document.getElementById("changePasswordForm");
 
 // Profile icon on header
 document.addEventListener("DOMContentLoaded", () => {
@@ -445,6 +446,83 @@ if (form) {
         showPopup("Network error. Please check the console.");
     }
 });
+}
+
+if (changePasswordForm) {
+    changePasswordForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const newPasswordInput = document.getElementById("newPassword");
+        const confirmNewPasswordInput = document.getElementById("confirmNewPassword");
+        const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+        const newPassword = String(newPasswordInput?.value || "").trim();
+        const confirmNewPassword = String(confirmNewPasswordInput?.value || "").trim();
+        const email = String(
+            localStorage.getItem("loggedInUserEmail") ||
+            sessionStorage.getItem("loggedInUserEmail") ||
+            ""
+        ).trim();
+
+        if (!email) {
+            showPopup("No logged-in email was found. Please log in again.");
+            return;
+        }
+
+        if (!newPassword || !confirmNewPassword) {
+            showPopup("Please fill in both password fields.");
+            return;
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            showPopup("New passwords do not match.");
+            return;
+        }
+
+        if (changePasswordBtn) {
+            changePasswordBtn.disabled = true;
+            changePasswordBtn.textContent = "Updating...";
+        }
+
+        try {
+            const endpoint = resolveApiUrl("/forgot-password");
+            const body = new URLSearchParams({
+                email,
+                newPassword,
+                confirmPassword: confirmNewPassword
+            }).toString();
+
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body
+            });
+
+            const result = await response.json().catch(() => ({
+                success: false,
+                message: "Unexpected server response."
+            }));
+
+            if (!response.ok || !result.success) {
+                showPopup(result.message || "Unable to update password.");
+                return;
+            }
+
+            localStorage.setItem("loggedInUserPassword", newPassword);
+            sessionStorage.setItem("loggedInUserPassword", newPassword);
+            changePasswordForm.reset();
+            showPopup(result.message || "Password updated successfully.");
+        } catch (error) {
+            showPopup("Network error. Please make sure the backend is running.");
+        } finally {
+            if (changePasswordBtn) {
+                changePasswordBtn.disabled = false;
+                changePasswordBtn.textContent = "Update Password";
+            }
+        }
+    });
 }
 
 // ======================
