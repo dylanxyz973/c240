@@ -463,15 +463,29 @@ function sayHi(friendName) {
     document.getElementById("chatPanel").classList.remove("hidden");
     document.getElementById("icebreakerHint")?.classList.add("hidden");
 
-    sendHello(friendName);
+    firstLoadThenMaybeHello(friendName);
 
     clearInterval(pollTimer);
     pollTimer = setInterval(loadMessages, 3000);
 }
 
-async function sendHello(friendName) {
-    await postMessage(friendName, "Hello 👋");
-    loadMessages();
+async function firstLoadThenMaybeHello(friendName) {
+    const me = localStorage.getItem("currentUser");
+    try {
+        const res = await fetch("https://n8ngc.codeblazar.org/webhook/get-messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userA: me, userB: friendName })
+        });
+        const msgs = await res.json();
+        if (!msgs || msgs.length === 0) {
+            await postMessage(friendName, "Hello 👋");  // first contact only
+        }
+        loadMessages();
+    } catch (e) {
+        console.error(e);
+        loadMessages();
+    }
 }
 
 async function postMessage(to, message) {
