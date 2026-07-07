@@ -585,8 +585,8 @@ footer {
 
 .profile-container {
   max-width: 1080px;
-  margin: 42px auto 56px;
-  padding: 0 20px;
+  margin: 28px auto;
+  padding: 0 24px;
   box-sizing: border-box;
 }
 
@@ -594,7 +594,7 @@ footer {
   background: linear-gradient(135deg, #fffaf5 0%, #f7e8dc 100%);
   border: 1px solid rgba(38, 36, 32, 0.08);
   border-radius: 24px;
-  padding: 32px;
+  padding: 28px;
   box-shadow: 0 18px 45px rgba(38, 36, 32, 0.08);
   position: relative;
   overflow: hidden;
@@ -608,6 +608,14 @@ footer {
   height: 180px;
   background: radial-gradient(circle, rgba(201, 100, 66, 0.16) 0%, rgba(201, 100, 66, 0) 70%);
   pointer-events: none;
+}
+
+/* Layout wrapper for intro (heading + illustration) to keep margins tidy */
+.profile-intro {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 18px;
 }
 
 .profile-card-header {
@@ -692,6 +700,8 @@ footer {
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.8);
   box-shadow: 0 12px 24px rgba(38, 36, 32, 0.08);
+  order: -1; /* show illustration to the left of the copy on wide screens */
+  margin-right: 22px;
 }
 
 .profile-illustration img {
@@ -992,13 +1002,32 @@ footer {
 }
  
 @media (max-width: 520px) {
-  .hero { padding: 3rem 1.5rem 2rem; }
-  .features { grid-template-columns: 1fr; }
-  .steps { grid-template-columns: 1fr; }
-  .lumi-inner { flex-direction: column; align-items: flex-start; text-align: left; }
-}
+  .profile-intro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-/* ---------- Suggested Friends ---------- */
+  .profile-illustration {
+    width: 140px;
+    height: 140px;
+    order: 0; /* restore natural order on mobile */
+    margin-right: 0;
+    margin-top: 12px;
+    align-self: center;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-group-short {
+    flex: 0 0 100%;
+  }
+
+  .interests-grid {
+    grid-template-columns: 1fr;
+  }
 
 .friends-section {
   position: relative;
@@ -1987,3 +2016,5 @@ footer {
 }
 
 .matches-empty p { margin: 0; font-size: 0.95rem; }
+
+}
