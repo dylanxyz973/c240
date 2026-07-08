@@ -31,98 +31,6 @@
     (function () {
       const form = document.getElementById('signupForm');
       const errorEl = document.getElementById('signupError');
-      const CLIENT_USERS_KEY = 'c240ClientUsers';
-
-      function clearClientAuthState() {
-        const authKeys = [
-          'currentUser',
-          'loggedInUser',
-          'loggedInUserEmail',
-          'loggedInUserPassword',
-          'isLoggedIn'
-        ];
-
-        authKeys.forEach(function (key) {
-          localStorage.removeItem(key);
-          sessionStorage.removeItem(key);
-        });
-
-        localStorage.removeItem('userProfile');
-      }
-
-      function loadClientUsers() {
-        try {
-          const raw = localStorage.getItem(CLIENT_USERS_KEY);
-          const parsed = raw ? JSON.parse(raw) : [];
-          return Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-          return [];
-        }
-      }
-
-      function saveClientUsers(users) {
-        localStorage.setItem(CLIENT_USERS_KEY, JSON.stringify(users));
-      }
-
-      function saveLoggedInState(username, email, password) {
-        const normalizedEmail = String(email || '').trim().toLowerCase();
-        const resolvedUsername = String(username || normalizedEmail.split('@')[0] || '').trim();
-
-        localStorage.setItem('currentUser', resolvedUsername);
-        localStorage.setItem('loggedInUser', resolvedUsername);
-        localStorage.setItem('loggedInUserEmail', normalizedEmail);
-        localStorage.setItem('loggedInUserPassword', password);
-        localStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('currentUser', resolvedUsername);
-        sessionStorage.setItem('loggedInUser', resolvedUsername);
-        sessionStorage.setItem('loggedInUserEmail', normalizedEmail);
-        sessionStorage.setItem('isLoggedIn', 'true');
-      }
-
-      function signupWithClientStorage(username, email, password, confirmPassword) {
-        if (!username || !email || !password || !confirmPassword) {
-          if (errorEl) {
-            errorEl.textContent = 'Please fill in all fields.';
-          }
-          return;
-        }
-
-        if (password !== confirmPassword) {
-          if (errorEl) {
-            errorEl.textContent = 'Passwords do not match.';
-          }
-          return;
-        }
-
-        const normalizedEmail = String(email || '').trim().toLowerCase();
-        const users = loadClientUsers();
-        const existing = users.find(function (user) {
-          return String(user.email || '').trim().toLowerCase() === normalizedEmail;
-        });
-
-        if (existing) {
-          if (errorEl) {
-            errorEl.textContent = 'Email already exists.';
-          }
-          return;
-        }
-
-        users.push({
-          username: String(username).trim(),
-          email: normalizedEmail,
-          password: String(password)
-        });
-
-        saveClientUsers(users);
-        clearClientAuthState();
-        saveLoggedInState(username, normalizedEmail, password);
-        window.location.replace('home.html');
-      }
-
-      function isJsonResponse(response) {
-        const contentType = String(response && response.headers && response.headers.get('content-type') || '').toLowerCase();
-        return contentType.includes('application/json');
-      }
 
       if (!form) return;
 
@@ -140,12 +48,7 @@
         try {
           const endpoint = typeof window.getApiUrl === 'function'
             ? window.getApiUrl('/signup')
-            : '/signup';
-
-          if (!endpoint) {
-            signupWithClientStorage(username, email, password, confirmPassword);
-            return;
-          }
+            : 'http://localhost:3000/signup';
 
           const body = new URLSearchParams({ username, email, password, confirmPassword }).toString();
 
@@ -157,26 +60,13 @@
             body
           });
 
-          if (!isJsonResponse(response)) {
-            signupWithClientStorage(username, email, password, confirmPassword);
-            return;
-          }
-
           const result = await response.json().catch(function () {
-            return null;
+            return { success: false, message: 'Unexpected server response.' };
           });
-
-          if (!result) {
-            signupWithClientStorage(username, email, password, confirmPassword);
-            return;
-          }
 
           if (!response.ok || !result.success) {
             if (errorEl) {
               errorEl.textContent = result.message || 'Signup failed. Please try again.';
-            }
-            if (!response.ok) {
-              signupWithClientStorage(username, email, password, confirmPassword);
             }
             return;
           }
@@ -184,12 +74,20 @@
           const normalizedEmail = String(result.email || email).trim().toLowerCase();
           const resolvedUsername = String(result.username || username || normalizedEmail.split('@')[0] || '').trim();
 
-          clearClientAuthState();
-          saveLoggedInState(resolvedUsername, normalizedEmail, password);
+          localStorage.setItem('currentUser', resolvedUsername);
+          localStorage.setItem('loggedInUser', resolvedUsername);
+          localStorage.setItem('loggedInUserEmail', normalizedEmail);
+          localStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('currentUser', resolvedUsername);
+          sessionStorage.setItem('loggedInUser', resolvedUsername);
+          sessionStorage.setItem('loggedInUserEmail', normalizedEmail);
+          sessionStorage.setItem('isLoggedIn', 'true');
 
           window.location.replace('home.html');
         } catch (error) {
-          signupWithClientStorage(username, email, password, confirmPassword);
+          if (errorEl) {
+            errorEl.textContent = 'Network error. Please make sure the backend is running.';
+          }
         }
       });
     })();

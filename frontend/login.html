@@ -29,62 +29,6 @@
     (function () {
       const form = document.getElementById('loginForm');
       const errorEl = document.getElementById('loginError');
-      const CLIENT_USERS_KEY = 'c240ClientUsers';
-
-      function loadClientUsers() {
-        try {
-          const raw = localStorage.getItem(CLIENT_USERS_KEY);
-          const parsed = raw ? JSON.parse(raw) : [];
-          return Array.isArray(parsed) ? parsed : [];
-        } catch (error) {
-          return [];
-        }
-      }
-
-      function saveLoggedInState(username, email, password) {
-        const normalizedEmail = String(email || '').trim().toLowerCase();
-        const resolvedUsername = String(username || normalizedEmail.split('@')[0] || '').trim();
-
-        localStorage.setItem('currentUser', resolvedUsername);
-        localStorage.setItem('loggedInUser', resolvedUsername);
-        localStorage.setItem('loggedInUserEmail', normalizedEmail);
-        localStorage.setItem('loggedInUserPassword', password);
-        localStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('currentUser', resolvedUsername);
-        sessionStorage.setItem('loggedInUser', resolvedUsername);
-        sessionStorage.setItem('loggedInUserEmail', normalizedEmail);
-        sessionStorage.setItem('isLoggedIn', 'true');
-      }
-
-      function loginWithClientStorage(email, password) {
-        const normalizedEmail = String(email || '').trim().toLowerCase();
-        const users = loadClientUsers();
-        const matchedUser = users.find(function (user) {
-          return String(user.email || '').trim().toLowerCase() === normalizedEmail;
-        });
-
-        if (!matchedUser) {
-          if (errorEl) {
-            errorEl.textContent = 'No local account was found for that email.';
-          }
-          return;
-        }
-
-        if (String(matchedUser.password || '') !== String(password || '')) {
-          if (errorEl) {
-            errorEl.textContent = 'Email or password is incorrect.';
-          }
-          return;
-        }
-
-        saveLoggedInState(matchedUser.username, matchedUser.email, password);
-        window.location.href = 'home.html';
-      }
-
-      function isJsonResponse(response) {
-        const contentType = String(response && response.headers && response.headers.get('content-type') || '').toLowerCase();
-        return contentType.includes('application/json');
-      }
 
       if (!form) return;
 
@@ -100,12 +44,7 @@
         try {
           const endpoint = typeof window.getApiUrl === 'function'
             ? window.getApiUrl('/login')
-            : '/login';
-
-          if (!endpoint) {
-            loginWithClientStorage(email, password);
-            return;
-          }
+            : 'http://localhost:3000/login';
 
           const body = new URLSearchParams({ email, password }).toString();
 
@@ -117,36 +56,31 @@
             body
           });
 
-          if (!isJsonResponse(response)) {
-            loginWithClientStorage(email, password);
-            return;
-          }
-
           const result = await response.json().catch(function () {
-            return null;
+            return { success: false, message: 'Unexpected server response.' };
           });
-
-          if (!result) {
-            loginWithClientStorage(email, password);
-            return;
-          }
 
           if (!response.ok || !result.success) {
             if (errorEl) {
               errorEl.textContent = result.message || 'Login failed. Please try again.';
             }
-
-            if (!response.ok) {
-              loginWithClientStorage(email, password);
-            }
             return;
           }
 
-          saveLoggedInState(result.username, email, password);
+          const normalizedEmail = String(result.email || email).trim().toLowerCase();
+          const username = String(result.username || normalizedEmail.split('@')[0] || '').trim();
+
+          localStorage.setItem('currentUser', username);
+          localStorage.setItem('loggedInUser', username);
+          localStorage.setItem('loggedInUserEmail', normalizedEmail);
+          localStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('loggedInUserEmail', normalizedEmail);
 
           window.location.href = 'home.html';
         } catch (error) {
-          loginWithClientStorage(email, password);
+          if (errorEl) {
+            errorEl.textContent = 'Network error. Please make sure the backend is running.';
+          }
         }
       });
     })();
