@@ -1,4 +1,4 @@
--- Authentication DB schema for server.js
+s-- Authentication DB schema for server.js
 CREATE DATABASE IF NOT EXISTS `authentication_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `authentication_db`;
 
