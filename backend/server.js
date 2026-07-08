@@ -209,12 +209,12 @@ async function executeQuery(query, params) {
 async function findUsersByEmailOrUsername(email, username) {
   if (useFileDatabase) {
     const users = loadUsersFile();
-    return users.filter((user) => user.email === email || user.username === username);
+    return users.filter((user) => normalizeEmail(user.email) === normalizeEmail(email) || String(user.username || '').trim() === String(username || '').trim());
   }
   const rows = await executeQuery('SELECT * FROM users WHERE email = ? OR username = ?', [email, username]);
   if (rows === null) {
     const users = loadUsersFile();
-    return users.filter((user) => user.email === email || user.username === username);
+    return users.filter((user) => normalizeEmail(user.email) === normalizeEmail(email) || String(user.username || '').trim() === String(username || '').trim());
   }
   return rows;
 }
@@ -222,12 +222,12 @@ async function findUsersByEmailOrUsername(email, username) {
 async function findUserByEmail(email) {
   if (useFileDatabase) {
     const users = loadUsersFile();
-    return users.find((user) => user.email === email) || null;
+    return users.find((user) => normalizeEmail(user.email) === normalizeEmail(email)) || null;
   }
   const rows = await executeQuery('SELECT * FROM users WHERE email = ?', [email]);
   if (rows === null) {
     const users = loadUsersFile();
-    return users.find((user) => user.email === email) || null;
+    return users.find((user) => normalizeEmail(user.email) === normalizeEmail(email)) || null;
   }
 
   if (rows[0]) {
