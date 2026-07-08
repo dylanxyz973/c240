@@ -885,8 +885,8 @@ footer {
   flex-wrap: wrap;
 }
 
-#profileForm .form-actions {
-  margin-bottom: 4cm;
+#profileForm + .profile-note {
+  margin-top: 47px;
 }
 
 .btn-save {
