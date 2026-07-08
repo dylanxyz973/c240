@@ -8,7 +8,8 @@
   <meta http-equiv="refresh" content="0; url=frontend/login.html" />
   <link rel="canonical" href="frontend/login.html" />
   <script>
-    window.location.replace("frontend/login.html");
+    const target = "frontend/login.html" + window.location.search + window.location.hash;
+    window.location.replace(target);
   </script>
 </head>
 

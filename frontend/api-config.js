@@ -3,11 +3,28 @@
     return String(value || '').trim().replace(/\/+$/, '');
   }
 
+  function readApiBaseFromQuery() {
+    if (typeof window.location === 'undefined' || !window.location.search) {
+      return '';
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const value = normalizeBase(params.get('apiBaseUrl') || params.get('api') || '');
+    return value;
+  }
+
   function isLocalHost(hostname) {
     return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
   }
 
+  const queryBase = readApiBaseFromQuery();
+
+  if (queryBase) {
+    localStorage.setItem('apiBaseUrl', queryBase);
+  }
+
   const configuredBase = normalizeBase(
+    queryBase ||
     window.__API_BASE_URL ||
     window.API_BASE_URL ||
     localStorage.getItem('apiBaseUrl') ||
@@ -35,7 +52,8 @@
     }
 
     if (runningOnGithubPages) {
-      return 'http://localhost:3000';
+      // GitHub Pages cannot host this Node backend; use configured API base when available.
+      return '';
     }
 
     return currentOrigin;

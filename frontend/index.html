@@ -8,7 +8,8 @@
   <meta http-equiv="refresh" content="0; url=login.html" />
   <link rel="canonical" href="login.html" />
   <script>
-    window.location.replace("login.html");
+    const target = "login.html" + window.location.search + window.location.hash;
+    window.location.replace(target);
   </script>
 </head>
 

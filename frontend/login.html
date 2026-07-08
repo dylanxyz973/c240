@@ -44,7 +44,7 @@
         try {
           const endpoint = typeof window.getApiUrl === 'function'
             ? window.getApiUrl('/login')
-            : 'http://localhost:3000/login';
+            : '/login';
 
           const body = new URLSearchParams({ email, password }).toString();
 
