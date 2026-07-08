@@ -883,7 +883,10 @@ footer {
   justify-content: flex-start;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+}
+
+#profileForm .form-actions {
+  margin-bottom: 4cm;
 }
 
 .btn-save {
