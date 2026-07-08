@@ -699,7 +699,12 @@ const server = http.createServer(async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         await insertUser(username, email, hashedPassword);
         console.log('[DB] user created:', email);
-        sendJson(res, { success: true, message: 'Your account has been created successfully.' });
+        sendJson(res, {
+          success: true,
+          message: 'Your account has been created successfully.',
+          username: String(username || '').trim(),
+          email: normalizeEmail(email)
+        });
       } catch (error) {
         console.error('[SIGNUP] error:', error);
         sendJson(res, { success: false, message: 'An error occurred.' }, 500);

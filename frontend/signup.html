@@ -32,6 +32,23 @@
       const form = document.getElementById('signupForm');
       const errorEl = document.getElementById('signupError');
 
+      function clearClientAuthState() {
+        const authKeys = [
+          'currentUser',
+          'loggedInUser',
+          'loggedInUserEmail',
+          'loggedInUserPassword',
+          'isLoggedIn'
+        ];
+
+        authKeys.forEach(function (key) {
+          localStorage.removeItem(key);
+          sessionStorage.removeItem(key);
+        });
+
+        localStorage.removeItem('userProfile');
+      }
+
       if (!form) return;
 
       form.addEventListener('submit', async function (event) {
@@ -71,14 +88,22 @@
             return;
           }
 
-          localStorage.setItem('currentUser', username);
-          localStorage.setItem('loggedInUser', username);
-          localStorage.setItem('loggedInUserEmail', email);
+          const normalizedEmail = String(result.email || email).trim().toLowerCase();
+          const resolvedUsername = String(result.username || username || normalizedEmail.split('@')[0] || '').trim();
+
+          clearClientAuthState();
+
+          localStorage.setItem('currentUser', resolvedUsername);
+          localStorage.setItem('loggedInUser', resolvedUsername);
+          localStorage.setItem('loggedInUserEmail', normalizedEmail);
           localStorage.setItem('loggedInUserPassword', password);
           localStorage.setItem('isLoggedIn', 'true');
-          sessionStorage.setItem('loggedInUserEmail', email);
+          sessionStorage.setItem('currentUser', resolvedUsername);
+          sessionStorage.setItem('loggedInUser', resolvedUsername);
+          sessionStorage.setItem('loggedInUserEmail', normalizedEmail);
+          sessionStorage.setItem('isLoggedIn', 'true');
 
-          window.location.href = 'home.html';
+          window.location.replace('home.html');
         } catch (error) {
           if (errorEl) {
             errorEl.textContent = 'Network error. Please make sure the backend is running.';

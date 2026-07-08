@@ -1,7 +1,34 @@
 const PROFILE_STORAGE_KEY = "userProfile";
 
+function getActiveAccountId() {
+    const email = String(
+        localStorage.getItem("loggedInUserEmail") ||
+        sessionStorage.getItem("loggedInUserEmail") ||
+        ""
+    ).trim().toLowerCase();
+
+    if (email) {
+        return email;
+    }
+
+    const username = String(
+        localStorage.getItem("loggedInUser") ||
+        localStorage.getItem("currentUser") ||
+        sessionStorage.getItem("loggedInUser") ||
+        ""
+    ).trim().toLowerCase();
+
+    return username;
+}
+
+function getProfileStorageKey() {
+    const accountId = getActiveAccountId();
+    return accountId ? `${PROFILE_STORAGE_KEY}:${accountId}` : PROFILE_STORAGE_KEY;
+}
+
 function loadStoredProfile() {
-    const stored = localStorage.getItem(PROFILE_STORAGE_KEY);
+    const accountKey = getProfileStorageKey();
+    const stored = localStorage.getItem(accountKey) || localStorage.getItem(PROFILE_STORAGE_KEY);
     if (!stored) return null;
 
     try {
@@ -14,7 +41,8 @@ function loadStoredProfile() {
 
 function saveStoredProfile(profile) {
     if (!profile) return;
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
+    const accountKey = getProfileStorageKey();
+    localStorage.setItem(accountKey, JSON.stringify(profile));
 }
 
 function clearStoredAuth() {
@@ -31,6 +59,8 @@ function clearStoredAuth() {
 }
 
 function clearStoredProfile() {
+    const accountKey = getProfileStorageKey();
+    localStorage.removeItem(accountKey);
     localStorage.removeItem(PROFILE_STORAGE_KEY);
 }
 
@@ -143,6 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutOpt.addEventListener("click", (event) => {
             event.preventDefault();
             showConfirmPopup("You will be logout. Click here to comfirm.", () => {
+                clearStoredProfile();
                 clearStoredAuth();
                 window.location.href = "login.html";
             });
